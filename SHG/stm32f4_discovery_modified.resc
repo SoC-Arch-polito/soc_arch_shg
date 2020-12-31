@@ -8,7 +8,7 @@ machine LoadPlatformDescription @platforms/boards/stm32f4_discovery-kit.repl
 
 cpu PerformanceInMips 125
 
-$bin?="/home/mauro/Documents/PlatformIO/Projects/soc_arch_shg/SHG/.pio/build/disco_f407vg/firmware.elf"
+$bin?="C:\Users\lmaro\OneDrive\Documents\PlatformIO\Projects\Test\.pio/build\disco_f407vg\firmware.elf"
 
 macro reset
 """
