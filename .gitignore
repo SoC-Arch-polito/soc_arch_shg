@@ -51,4 +51,4 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-*stm32f4_discovery_modified.resc*
+

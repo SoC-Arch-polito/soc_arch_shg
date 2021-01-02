@@ -1,0 +1,25 @@
+:name: STM32F4 Discovery
+:description: This script runs Contiki on STM32F4 Discovery.
+
+using sysbus
+$name?="STM32F4_Discovery"
+mach create $name
+machine LoadPlatformDescription @platforms/boards/stm32f4_discovery-kit.repl
+machine LoadPlatformDescription @./peripherals/peripheral_definition.repl
+
+emulation CreateEnvironment "SHG"
+SHG Temperature 22
+SHG Humidity 40
+i2c1.TempHumSensor SetEnvironment SHG
+
+cpu PerformanceInMips 125
+
+$bin?="$CWD/.pio/build/disco_f407vg/firmware.elf"
+
+macro reset
+"""
+    sysbus LoadELF $bin
+
+"""
+
+runMacro $reset
