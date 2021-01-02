@@ -1,0 +1,2 @@
+TempHumSensor: Sensors.SI70xx @ i2c1 0x00
+    model: 21
