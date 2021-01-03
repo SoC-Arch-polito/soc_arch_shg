@@ -1,45 +1,63 @@
-using System;
-using Antmicro.Renode.Core;
-using Antmicro.Renode.Exceptions;
+//
+// Copyright (c) 2010-2018 Antmicro
+//
+// This file is licensed under the MIT License.
+// Full license text is available in 'licenses/MIT.txt'.
+
+
+
+
+
+
 using Antmicro.Renode.Peripherals.I2C;
 using Antmicro.Renode.Utilities;
+using Antmicro.Renode.EmulationEnvironment;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Antmicro.Migrant;
+using Antmicro.Migrant.Hooks;
+using Antmicro.Renode.Core;
+using Antmicro.Renode.Exceptions;
+using Antmicro.Renode.Logging;
 using Antmicro.Renode.Peripherals.Sensor;
+using Antmicro.Renode.UserInterface;
 
 namespace Antmicro.Renode.Peripherals.Sensors
 {
-    public class LightSensor  
+    public class LightSensor : II2CPeripheral, ILightSensor,IExternal
     {
         public LightSensor()
         {
+            commands = new I2CCommandManager<Action<byte[]>>();
+            outputBuffer = new Queue<byte>();
+            commands.RegisterCommand(MeasureLight, 0xE5);
             Reset();
         }
 
-        public void FinishTransmission()
+        public byte[] Read(int count = 1)
         {
-            Reset();
+            var result = outputBuffer.ToArray();
+            this.Log(LogLevel.Noisy, "Reading {0} bytes from the device (asked for {1} bytes).", result.Length, count);
+            outputBuffer.Clear();
+            return result;
+        }
+
+        public void Write(byte[] data)
+        {
+            this.Log(LogLevel.Noisy, "Received {0} bytes: [{1}]", data.Length, string.Join(", ", data.Select(x => x.ToString())));
+            if(!commands.TryGetCommand(data, out var command))
+            {
+                this.Log(LogLevel.Warning, "Unknown command: [{0}]. Ignoring the data.", string.Join(", ", data.Select(x => string.Format("0x{0:X}", x))));
+                return;
+            }
+            command(data);
         }
 
         public void Reset()
         {
-            isFirstByte = true;
-            currentReadOut = 0;
-        }
-
-        public byte Transmit(byte data)
-        {
-            byte value = 0;
-            if(isFirstByte)
-            {
-                //The 3 LSB are set to 1. 0x1000 = 0.0625C. Decimal->Int->UInt conversion to handle negative values.
-                currentReadOut = (((uint)(int)(Light * 10000 / 625) << 3) | 0x7);
-                value = (byte)(currentReadOut >> 8);
-            }
-            else
-            {
-                value = (byte)(currentReadOut & 0xFF);
-            }
-            isFirstByte = !isFirstByte;
-            return value;
+            Light = 0;
+            outputBuffer.Clear();
         }
 
         public decimal Light
@@ -52,15 +70,24 @@ namespace Antmicro.Renode.Peripherals.Sensors
             {
                 if(MinLight > value || value > MaxLight)
                 {
-                    throw new RecoverableException("The light value must be between {0} and {1}.".FormatWith(MinLight, MaxLight));
+                    throw new RecoverableException("The temperature value must be between {0} and {1}.".FormatWith(MinLight, MaxLight));
                 }
                 light = value;
             }
         }
 
+        private void MeasureLight(byte[] command)
+        {
+            outputBuffer.Enqueue((byte)((uint)light >> 8));
+            outputBuffer.Enqueue((byte)((uint)light & 0xFF));
+        }
+
+
+
         private decimal light;
-        private uint currentReadOut;
-        private bool isFirstByte;
+
+        private readonly I2CCommandManager<Action<byte[]>> commands;
+        private readonly Queue<byte> outputBuffer;
 
         private const decimal MaxLight = 100;
         private const decimal MinLight = 0;

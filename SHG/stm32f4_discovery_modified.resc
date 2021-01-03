@@ -7,10 +7,13 @@ mach create $name
 machine LoadPlatformDescription @platforms/boards/stm32f4_discovery-kit.repl
 machine LoadPlatformDescription @./peripherals/peripheral_definition.repl
 machine LoadPlatformDescription @./peripherals/ext_peripheral.repl
-emulation CreateEnvironment "SHG"
-SHG Temperature 22
-SHG Humidity 40
-i2c1.TempHumSensor SetEnvironment SHG
+
+alias Temperature "i2c1.TempHumSensor Temperature"
+alias Humidity "i2c1.TempHumSensor Temperature"
+alias Light "i2c1.LightSensor Light"
+
+
+
 
 cpu PerformanceInMips 125
 
