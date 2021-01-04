@@ -1,0 +1,79 @@
+using Antmicro.Renode.Peripherals.I2C;
+using Antmicro.Renode.Utilities;
+using Antmicro.Renode.EmulationEnvironment;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Antmicro.Migrant;
+using Antmicro.Migrant.Hooks;
+using Antmicro.Renode.Core;
+using Antmicro.Renode.Exceptions;
+using Antmicro.Renode.Logging;
+using Antmicro.Renode.UserInterface;
+
+namespace Antmicro.Renode.Peripherals.Actuator
+{
+    public class HeatingSystem : II2CPeripheral, IHeatingSystem,IExternal
+    {
+        public HeatingSystem()
+        {
+            outputBuffer = new Queue<byte>();
+            Reset();
+        }
+
+        public byte[] Read(int count = 1)
+        {
+            var result = outputBuffer.ToArray();
+            this.Log(LogLevel.Noisy, "Reading {0} bytes from the device (asked for {1} bytes).", result.Length, count);
+            outputBuffer.Clear();
+            return result;
+        }
+
+        public void Write(byte[] data)
+        {
+            byte[] b=data.ToArray();
+            byte act=0x01;
+            byte dea=0x00;
+            byte err=0xFF;
+            this.Log(LogLevel.Info, "WRITE MODE RECIVED{0} bytes: [{1}]", data.Length, b[data.Length-1]);
+            if(b[data.Length-1].Equals(act)){
+                outputBuffer.Clear();
+                outputBuffer.Enqueue(act);
+                active=true;
+            }else if(b[data.Length-1].Equals(dea)){
+                outputBuffer.Clear();
+                outputBuffer.Enqueue(dea);
+                active=false;
+            } else {
+                outputBuffer.Clear();
+                outputBuffer.Enqueue(err);
+                active=false;
+            }
+            return;
+        }
+
+        public void Reset()
+        {
+            Active = false;
+            outputBuffer.Clear();
+            outputBuffer.Enqueue(0x00);
+        }
+
+        public bool Active
+        {
+            get
+            {
+                return active;
+            }
+            set
+            {
+                active = value;
+            }        }
+
+
+        private bool active;
+
+
+        private readonly Queue<byte> outputBuffer;
+    }
+}

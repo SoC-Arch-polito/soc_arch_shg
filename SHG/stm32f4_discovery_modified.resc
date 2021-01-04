@@ -8,9 +8,12 @@ machine LoadPlatformDescription @platforms/boards/stm32f4_discovery-kit.repl
 machine LoadPlatformDescription @./peripherals/peripheral_definition.repl
 machine LoadPlatformDescription @./peripherals/ext_peripheral.repl
 
+showAnalyzer uart1
+
 alias Temperature "i2c1.TempHumSensor Temperature"
 alias Humidity "i2c1.TempHumSensor Temperature"
 alias Light "i2c1.LightSensor Light"
+alias Heating "i2c2.HeatingS Active" 
 
 
 

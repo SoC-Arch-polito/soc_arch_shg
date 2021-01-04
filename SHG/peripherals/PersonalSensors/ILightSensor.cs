@@ -10,7 +10,6 @@ namespace Antmicro.Renode.Peripherals.Sensor
 
     public interface ILightSensor : ISensor
     {
-        // Celsius degrees
        decimal Light { get; set; }
     }
 }
