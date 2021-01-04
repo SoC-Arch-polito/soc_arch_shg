@@ -10,6 +10,6 @@ namespace Antmicro.Renode.Peripherals.Sensor
 
     public interface ILightSensor : ISensor
     {
-       decimal Light { get; set; }
+       uint Light { get; set; }
     }
 }

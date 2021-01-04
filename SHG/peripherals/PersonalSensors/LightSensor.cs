@@ -37,8 +37,10 @@ namespace Antmicro.Renode.Peripherals.Sensors
 
         public byte[] Read(int count = 1)
         {
+            outputBuffer.Clear();
+            outputBuffer.Enqueue((byte)light);
             var result = outputBuffer.ToArray();
-            this.Log(LogLevel.Noisy, "Reading {0} bytes from the device (asked for {1} bytes).", result.Length, count);
+            this.Log(LogLevel.Info, "Reading {0} bytes from the device (asked for {1} bytes): {2}", result.Length, count,result[0]);
             outputBuffer.Clear();
             return result;
         }
@@ -60,7 +62,7 @@ namespace Antmicro.Renode.Peripherals.Sensors
             outputBuffer.Clear();
         }
 
-        public decimal Light
+        public uint Light
         {
             get
             {
@@ -68,11 +70,14 @@ namespace Antmicro.Renode.Peripherals.Sensors
             }
             set
             {
+
                 if(MinLight > value || value > MaxLight)
                 {
-                    throw new RecoverableException("The temperature value must be between {0} and {1}.".FormatWith(MinLight, MaxLight));
+                    throw new RecoverableException("The light value must be between {0} and {1}.".FormatWith(MinLight, MaxLight));
                 }
+
                 light = value;
+
             }
         }
 
@@ -84,7 +89,7 @@ namespace Antmicro.Renode.Peripherals.Sensors
 
 
 
-        private decimal light;
+        private uint light;
 
         private readonly I2CCommandManager<Action<byte[]>> commands;
         private readonly Queue<byte> outputBuffer;

@@ -5,8 +5,11 @@
 #include <tm_stm32_usart.h>
 #include <tm_stm32_i2c.h>
 #include <string.h>
+#include <stdio.h>
 
-
+#define LIGHT_SENSOR_ADDRESS (0x04<<1)
+#define TEMPHUM_SENSOR_ADDRESS (0x02<<1)
+#define HEATINGS_ACTUATOR_ADDRESS (0x02<<1)
 #define LED_PIN                                GPIO_PIN_5
 #define LED_GPIO_PORT                          GPIOA
 #define LED_GPIO_CLK_ENABLE()                  __HAL_RCC_GPIOA_CLK_ENABLE()
@@ -26,33 +29,58 @@ int main(void)
   TM_SPI_Init(SPI2, TM_SPI_PinsPack_2);
   TM_USART_Init(USART1, TM_USART_PinsPack_2, 9600);
 
-  TM_I2C_Init(I2C2, TM_I2C_PinsPack_1, TM_I2C_CLOCK_STANDARD);
-
+  TM_I2C_Init(I2C2, TM_I2C_PinsPack_2, TM_I2C_CLOCK_STANDARD);
+  TM_I2C_Init(I2C1, TM_I2C_PinsPack_1, TM_I2C_CLOCK_STANDARD);
 
 uint8_t READED=0xFF;
-
+char buffer[1024];
 //TEST READING AND WRITING VALUE ON THE ACTUATOR
- if(TM_I2C_IsDeviceConnected(I2C2, 0x00)==TM_I2C_Result_Ok){
+ if(TM_I2C_IsDeviceConnected(I2C2, HEATINGS_ACTUATOR_ADDRESS)==TM_I2C_Result_Ok){
    while(1){
   //Disabled
-  TM_I2C_WriteNoRegister(I2C2, 0x00,0x00); 
-  TM_I2C_ReadNoRegister(I2C2, 0X00, &READED);
-  HeatingSystemOUT(READED);
-  
+  if(TM_I2C_IsDeviceConnected(I2C1, LIGHT_SENSOR_ADDRESS)==TM_I2C_Result_Ok){
+    while(READED!=100){
+      HAL_Delay(1000);
+      TM_I2C_ReadNoRegister(I2C1, LIGHT_SENSOR_ADDRESS, &READED);
+      snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Light Sensor value: %d\n\r",READED);
+      TM_USART_Puts(USART1,buffer);
+    }
+    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Light Sensor EXIT\n\r");
+      TM_USART_Puts(USART1,buffer);
+  }
+  else
+  {
+    TM_USART_Puts(USART1,"[SHG:ERROR]: NO LIGHT SENSOR FOUND\n\r");
+  }
+
+  uint8_t data[2];
+  uint8_t reciv[2];
+  data[0]=0;
+  data[1]=7;
+  while(1){
+  TM_I2C_WriteMultiNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS,data,2); 
+  HAL_Delay(1000);
+  TM_I2C_ReadMultiNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS, reciv,2);
+  HeatingSystemOUT(reciv);
+  }
 
   HAL_Delay(10);  
 //ENABLED
-  TM_I2C_WriteNoRegister(I2C2, 0x00,0x01);
-  TM_I2C_ReadNoRegister(I2C2, 0X00, &READED);
+  TM_I2C_WriteNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS,0x01);
+  TM_I2C_ReadNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS, &READED);
   HeatingSystemOUT(READED);
   
   HAL_Delay(10);
 //ERROR
-  TM_I2C_WriteNoRegister(I2C2, 0x00,0x15);
-  TM_I2C_ReadNoRegister(I2C2, 0X00, &READED);
+  TM_I2C_WriteNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS,0x15);
+  TM_I2C_ReadNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS, &READED);
   HeatingSystemOUT(READED);
    }
+ }else
+ {
+   TM_USART_Puts(USART1,"[SHG:ERROR]: NO HS FOUND\n\r");
  }
+ 
 
 
   TM_I2C_Write(I2C2, 0x00, 0xE5,0x12);
@@ -87,16 +115,16 @@ uint8_t READED=0xFF;
   }
 }
 
-void HeatingSystemOUT(uint8_t READED){
+void HeatingSystemOUT(uint8_t* READED){
   char buffer[1024];
-  if(READED==0x00){
-    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: OFF\n\r");
+  if(READED[0]==0x00){
+    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: OFF value %d\n\r",READED[2]);
   }
-  else if(READED==0x01){
-    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: ON\n\r");
+  else if(READED[0]==0x01){
+    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: ON %d\n\r",READED[2]);
   }else
   {
-    snprintf(buffer, sizeof(buffer), "[SHG:ERROR]: Heating System status: OFF(forced)\n\r");
+    snprintf(buffer, sizeof(buffer), "[SHG:ERROR]: Heating System status: OFF(forced) %d\n\r",READED[2]);
   }
   TM_USART_Puts(USART1,buffer);
   return;

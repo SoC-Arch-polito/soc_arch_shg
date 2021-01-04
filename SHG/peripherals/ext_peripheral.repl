@@ -1,4 +1,4 @@
-TempHumSensor: Sensors.SI70xx @ i2c1 0x00
+TempHumSensor: Sensors.SI70xx @ i2c1 0x02
     model: 21
-LightSensor: Sensors.LightSensor @i2c1 0x01
-HeatingS: Actuator.HeatingSystem @i2c2 0x00
+LightSensor: Sensors.LightSensor @i2c1 0x04
+HeatingS: Actuator.HeatingSystem @i2c2 0x02

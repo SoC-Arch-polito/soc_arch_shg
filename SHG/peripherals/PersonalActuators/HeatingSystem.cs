@@ -32,22 +32,33 @@ namespace Antmicro.Renode.Peripherals.Actuator
         public void Write(byte[] data)
         {
             byte[] b=data.ToArray();
-            byte act=0x01;
-            byte dea=0x00;
+            byte on=0x01;
+            byte off=0x00;
             byte err=0xFF;
-            this.Log(LogLevel.Info, "WRITE MODE RECIVED{0} bytes: [{1}]", data.Length, b[data.Length-1]);
-            if(b[data.Length-1].Equals(act)){
+            this.Log(LogLevel.Info, "WRITE MODE RECIVED {0} bytes: [{1}]", data.Length, string.Join(", ", data.Select(x => x.ToString())));
+            if(data.Length>1){
+            if(b[1].Equals(on)){
                 outputBuffer.Clear();
-                outputBuffer.Enqueue(act);
+                outputBuffer.Enqueue(on);
+                if(data.Length>2){
+                  outputBuffer.Enqueue(b[2]);  
+                }
                 active=true;
-            }else if(b[data.Length-1].Equals(dea)){
+            }else if(b[1].Equals(off)){
                 outputBuffer.Clear();
-                outputBuffer.Enqueue(dea);
+                outputBuffer.Enqueue(off);
+                if(data.Length>2){
+                  outputBuffer.Enqueue(b[2]);  
+                }
                 active=false;
             } else {
                 outputBuffer.Clear();
                 outputBuffer.Enqueue(err);
+                if(data.Length>2){
+                  outputBuffer.Enqueue(b[2]);  
+                }
                 active=false;
+            }
             }
             return;
         }
