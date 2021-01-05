@@ -53,8 +53,8 @@ int main(void)
 
 
 
-  //xTaskCreateStatic(HeatingSystemOUT, "Name1", H_TASK_STACK_SIZE, NULL, 1, fpuTaskStack, &fpuTaskBuffer);
-  //xTaskCreateStatic(HeatingSystemOUT2, "Name2", H_TASK_STACK_SIZE, NULL, 1, fpuTaskStack2, &fpuTaskBuffer2);
+  xTaskCreateStatic(HeatingSystemOUT, "Name1", H_TASK_STACK_SIZE, NULL, 1, fpuTaskStack, &fpuTaskBuffer);
+  xTaskCreateStatic(HeatingSystemOUT2, "Name2", H_TASK_STACK_SIZE, NULL, 1, fpuTaskStack2, &fpuTaskBuffer2);
 
 
   printf("System Started!\n");
@@ -149,12 +149,10 @@ char buffer[1024];
 
     TM_USART_Puts(USART1, "hello world.\n\r");
 
-          /* Send multi bytes */
-    /*
+       
     Transmit[i] = i;
         
-    /* Check for receive */
-    /*
+   
     Receive[i] = TM_SPI_Send(SPI2, Transmit[i]);
     
     i=i+1;
@@ -162,6 +160,12 @@ char buffer[1024];
   }
   */
 }
+
+void vApplicationGetIdleTaskMemory( StaticTask_t ** ppxIdleTaskTCBBuffer,
+                                               StackType_t ** ppxIdleTaskStackBuffer,
+                                               uint32_t * pulIdleTaskStackSize ){
+                                                 return;
+                                               }
 
 void HeatingSystemOUT(){
    char buffer[1024];
@@ -201,11 +205,6 @@ void HeatingSystemOUT2(){
   }
 }
 
-void SysTick_Handler(void)
-{
-  HAL_IncTick();
-}
-
 void NMI_Handler(void)
 {
 }
@@ -231,16 +230,7 @@ void UsageFault_Handler(void)
   while (1) {}
 }
 
-void SVC_Handler(void)
-{
-}
-
-
 void DebugMon_Handler(void)
-{
-}
-
-void PendSV_Handler(void)
 {
 }
 
