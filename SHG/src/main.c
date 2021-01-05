@@ -6,6 +6,8 @@
 #include <tm_stm32_i2c.h>
 #include <string.h>
 #include <stdio.h>
+#include <FreeRTOS.h>
+
 
 #define LIGHT_SENSOR_ADDRESS (0x04<<1)
 #define TEMPHUM_SENSOR_ADDRESS (0x02<<1)
@@ -14,14 +16,19 @@
 #define LED_GPIO_PORT                          GPIOA
 #define LED_GPIO_CLK_ENABLE()                  __HAL_RCC_GPIOA_CLK_ENABLE()
 
+
+
+
 uint8_t Transmit[15], Receive[15];
+
+
+void HeatingSystemOUT(uint8_t* READED);
 
 int main(void)
 {
   uint8_t i=0;
 
   TM_RCC_InitSystem();
-
   HAL_Init();
 
   TM_DISCO_LedInit();
@@ -57,11 +64,12 @@ char buffer[1024];
   uint8_t reciv[2];
   data[0]=0;
   data[1]=7;
+
   while(1){
-  TM_I2C_WriteMultiNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS,data,2); 
-  HAL_Delay(1000);
-  TM_I2C_ReadMultiNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS, reciv,2);
-  HeatingSystemOUT(reciv);
+      TM_I2C_WriteMultiNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS,data,3); 
+      HAL_Delay(1000);
+      TM_I2C_ReadMultiNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS, reciv,3);
+      HeatingSystemOUT(reciv);
   }
 
   HAL_Delay(10);  
@@ -172,3 +180,4 @@ void DebugMon_Handler(void)
 void PendSV_Handler(void)
 {
 }
+
