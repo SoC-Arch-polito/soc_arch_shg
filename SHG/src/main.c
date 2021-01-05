@@ -1,4 +1,4 @@
-#include "stm32f4xx_hal.h"
+#include <stm32f4xx_hal.h>
 #include <defines.h>
 #include <tm_stm32_disco.h>
 #include <tm_stm32_spi.h>
@@ -6,8 +6,11 @@
 #include <tm_stm32_i2c.h>
 #include <string.h>
 #include <stdio.h>
-#include "FreeRTOS.h"
-#include "task.h"
+#include <FreeRTOS.h>
+#include <stm32f4xx.h>
+#include <task.h>
+
+
 
 
 #define LIGHT_SENSOR_ADDRESS (0x04<<1)
