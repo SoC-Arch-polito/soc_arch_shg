@@ -6,7 +6,8 @@
 #include <tm_stm32_i2c.h>
 #include <string.h>
 #include <stdio.h>
-#include <FreeRTOS.h>
+#include "FreeRTOS.h"
+#include "task.h"
 
 
 #define LIGHT_SENSOR_ADDRESS (0x04<<1)
@@ -17,15 +18,49 @@
 #define LED_GPIO_CLK_ENABLE()                  __HAL_RCC_GPIOA_CLK_ENABLE()
 
 
-
+#define CCM_RAM __attribute__((section(".ccmram")))
 
 uint8_t Transmit[15], Receive[15];
 
 
-void HeatingSystemOUT(uint8_t* READED);
+#define H_TASK_STACK_SIZE 256
+
+StackType_t fpuTaskStack[H_TASK_STACK_SIZE] CCM_RAM;  // Put task stack in CCM
+StaticTask_t fpuTaskBuffer CCM_RAM;  // Put TCB in CCM
+
+StackType_t fpuTaskStack2[H_TASK_STACK_SIZE] CCM_RAM;  // Put task stack in CCM
+StaticTask_t fpuTaskBuffer2 CCM_RAM;  // Put TCB in CCM
+
+void test_FPU_test(void* p);
+
+
+void HeatingSystemOUT();
+void HeatingSystemOUT2();
 
 int main(void)
 {
+  TM_RCC_InitSystem();
+  HAL_Init();
+
+  TM_USART_Init(USART1, TM_USART_PinsPack_1, 9600);
+  TM_USART_Init(USART2, TM_USART_PinsPack_2, 9600);
+
+
+
+
+
+
+  //xTaskCreateStatic(HeatingSystemOUT, "Name1", H_TASK_STACK_SIZE, NULL, 1, fpuTaskStack, &fpuTaskBuffer);
+  //xTaskCreateStatic(HeatingSystemOUT2, "Name2", H_TASK_STACK_SIZE, NULL, 1, fpuTaskStack2, &fpuTaskBuffer2);
+
+
+  printf("System Started!\n");
+  vTaskStartScheduler();  // should never return
+
+  for (;;);
+
+
+  /*
   uint8_t i=0;
 
   TM_RCC_InitSystem();
@@ -112,30 +147,55 @@ char buffer[1024];
     TM_USART_Puts(USART1, "hello world.\n\r");
 
           /* Send multi bytes */
-    
+    /*
     Transmit[i] = i;
         
     /* Check for receive */
+    /*
     Receive[i] = TM_SPI_Send(SPI2, Transmit[i]);
     
     i=i+1;
 
   }
+  */
 }
 
-void HeatingSystemOUT(uint8_t* READED){
-  char buffer[1024];
+void HeatingSystemOUT(){
+   char buffer[1024];
+  uint8_t READED[2];
+  READED[0]=0;
+  READED[1]=7;
+  while(1){
   if(READED[0]==0x00){
-    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: OFF value %d\n\r",READED[2]);
+    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: OFF value %d\n\r",READED[1]);
   }
   else if(READED[0]==0x01){
-    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: ON %d\n\r",READED[2]);
+    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: ON %d\n\r",READED[1]);
   }else
   {
-    snprintf(buffer, sizeof(buffer), "[SHG:ERROR]: Heating System status: OFF(forced) %d\n\r",READED[2]);
+    snprintf(buffer, sizeof(buffer), "[SHG:ERROR]: Heating System status: OFF(forced) %d\n\r",READED[1]);
   }
   TM_USART_Puts(USART1,buffer);
-  return;
+  }
+}
+
+void HeatingSystemOUT2(){
+   char buffer[1024];
+  uint8_t READED[2];
+  READED[0]=0;
+  READED[1]=7;
+  while(1){
+  if(READED[0]==0x00){
+    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: OFF value %d\n\r",READED[1]);
+  }
+  else if(READED[0]==0x01){
+    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: ON %d\n\r",READED[1]);
+  }else
+  {
+    snprintf(buffer, sizeof(buffer), "[SHG:ERROR]: Heating System status: OFF(forced) %d\n\r",READED[1]);
+  }
+  TM_USART_Puts(USART2,buffer);
+  }
 }
 
 void SysTick_Handler(void)
