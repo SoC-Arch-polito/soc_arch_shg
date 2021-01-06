@@ -9,13 +9,14 @@
 - clear         -> clear the UART command line;
 - help          -> to show the available commands;
 - stop          -> pause the SHG;
-- setTresholds  -> force the three thresholds to a user defined thresholds;
+- setThs        -> force the three thresholds to a user defined thresholds;
+- getThs        -> print the three thresholds to the user;
 - reset         -> reset to the default state of the machine;
 */
 /***********************************************/
 // Shared Variable used to set the command.
 enum command {
-  start, log, status, clear, help, stop, setThs, reset
+  start, log, status, clear, help, stop, setThs, getThs, reset, error
 }; 
 
     void CommandConsole(void const * argument);
