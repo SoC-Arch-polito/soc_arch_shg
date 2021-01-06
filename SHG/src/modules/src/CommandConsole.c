@@ -4,6 +4,7 @@
 #include "../../FreeRTOS-CMSIS/task.h"
 #include "../..//FreeRTOS-CMSIS/main.h"
 #include "../../FreeRTOS-CMSIS/cmsis_os.h"
+#include "../../FreeRTOS-CMSIS/usart.h"
 #include <stm32f4xx_hal.h>
 #include <defines.h>
 #include <tm_stm32_disco.h>
@@ -48,8 +49,23 @@ void CommandConsole(void const * argument)
   
   /* USER CODE BEGIN CommandConsole */
   /* Infinite loop */
+  char in[8]; 
+  char c;
   for(;;)
   {
+
+// look here decoment this ;) dopo tot secondi ti fa vedere ciò che ha letto
+    while (1){
+      //TM_USART_Puts(USART2,"test\n\r");
+
+      //FUNZIONA MA NON Vedi ciò che scrivi
+  
+      // while(HAL_UART_Receive(&huart2, (uint8_t *)in, 8,10000)==HAL_BUSY);
+      //   TM_USART_Puts(USART2,"  RICEVUTO ");
+      //   TM_USART_Puts(USART2,in);     
+      //   TM_USART_Puts(USART2,"\n\r");  
+    
+    }
     /* Waiting for \n at the end of string */
     if(TM_USART_Gets(USART2, comm, sizeof(comm))){
       //in base on the command we do a different stuff

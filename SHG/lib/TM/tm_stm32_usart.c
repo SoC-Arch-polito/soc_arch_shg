@@ -865,7 +865,7 @@ void TM_USART8_InitPins(TM_USART_PinsPack_t pinspack) {
 #endif
 
 /* Interrupt handlers */
-#ifdef USART1
+#ifdef USART1DD
 void USART1_IRQHandler(void) {
 	/* Check if interrupt was because data is received */
 	if (USART1->USART_STATUS_REG & USART_ISR_RXNE) {
@@ -883,7 +883,7 @@ void USART1_IRQHandler(void) {
 }
 #endif
 
-#ifdef USART2
+#ifdef USART2DD
 void USART2_IRQHandler(void) {
 	/* Check if interrupt was because data is received */
 	if (USART2->USART_STATUS_REG & USART_ISR_RXNE) {
