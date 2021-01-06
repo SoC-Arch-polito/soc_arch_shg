@@ -50,36 +50,34 @@ void CommandConsole(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    //to get the command
-    while((TM_USART_Gets(USART2, comm, COMMANDLENGTH + 1)) == 0){
-      osDelay(10000);
-    }
-
-    //in base on the command we do a different stuff
-    cmd = ParseCommand(comm);
-    switch (cmd){
-    case start:
-      TM_USART_Puts(USART2,WELCOME_STRING);
-      break;
-    case log:
-      break;
-    case status:
-      break;
-    case clear:
-      break;
-    case help:
-      break;
-    case stop:
-      break;
-    case setThs:
-      break;
-    case getThs:
-      break;
-    case reset:
-      break;
-    default:
-      TM_USART_Puts(USART2,UNKNOWNCOMMAND);
-      break;
+    /* Waiting for \n at the end of string */
+    if(TM_USART_Gets(USART2, comm, sizeof(comm))){
+      //in base on the command we do a different stuff
+      cmd = ParseCommand(comm);
+      switch (cmd){
+        case start:
+          TM_USART_Puts(USART2,WELCOME_STRING);
+          break;
+        case log:
+          break;
+        case status:
+          break;
+        case clear:
+          break;
+        case help:
+          break;
+        case stop:
+          break;
+        case setThs:
+          break;
+        case getThs:
+          break;
+        case reset:
+          break;
+        default:
+          TM_USART_Puts(USART2,UNKNOWNCOMMAND);
+          break;
+      }
     }
     TM_USART_Puts(USART2,"UART2 NEUROMORPHIC PURE IOO\n\r");
     osDelay(1000);

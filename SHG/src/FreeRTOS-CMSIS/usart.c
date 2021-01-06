@@ -63,7 +63,7 @@ void MX_USART2_UART_Init(void)
   {
     Error_Handler();
   }*/
-  TM_USART_Init(USART1, TM_USART_PinsPack_2, 9600);
+  TM_USART_Init(USART2, TM_USART_PinsPack_2, 9600);
 }
 
 void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
