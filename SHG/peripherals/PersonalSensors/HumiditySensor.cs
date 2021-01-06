@@ -25,9 +25,9 @@ using Antmicro.Renode.UserInterface;
 
 namespace Antmicro.Renode.Peripherals.Sensors
 {
-    public class HumididySensor : II2CPeripheral, IHumididySensor,IExternal
+    public class HumiditySensor : II2CPeripheral, IHumidityMODSensor,IExternal
     {
-        public HumididySensor()
+        public HumiditySensor()
         {
             commands = new I2CCommandManager<Action<byte[]>>();
             outputBuffer = new Queue<byte>();

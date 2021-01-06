@@ -6,8 +6,16 @@ $name?="STM32F4_Discovery"
 mach create $name
 include @./peripherals/PersonalActuators/IHeatingSystem.cs
 include @./peripherals/PersonalActuators/HeatingSystem.cs
+include @./peripherals/PersonalActuators/ILightSystem.cs
+include @./peripherals/PersonalActuators/LightSystem.cs
+include @./peripherals/PersonalActuators/IWaterSystem.cs
+include @./peripherals/PersonalActuators/WaterSystem.cs
 include @./peripherals/PersonalSensors/ILightSensor.cs
 include @./peripherals/PersonalSensors/LightSensor.cs
+include @./peripherals/PersonalSensors/ITemperatureMODSensor.cs
+include @./peripherals/PersonalSensors/TemperatureSensor.cs
+include @./peripherals/PersonalSensors/IHumidityMODSensor.cs
+include @./peripherals/PersonalSensors/HumiditySensor.cs
 machine LoadPlatformDescription @platforms/boards/stm32f4_discovery-kit.repl
 machine LoadPlatformDescription @./peripherals/peripheral_definition.repl
 machine LoadPlatformDescription @./peripherals/ext_peripheral.repl

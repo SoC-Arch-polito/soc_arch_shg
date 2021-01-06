@@ -13,9 +13,9 @@ using Antmicro.Renode.UserInterface;
 
 namespace Antmicro.Renode.Peripherals.Actuator
 {
-    public class HeatingSystem : II2CPeripheral, IHeatingSystem,IExternal
+    public class WaterSystem : II2CPeripheral, IWaterSystem,IExternal
     {
-        public HeatingSystem()
+        public WaterSystem()
         {
             outputBuffer = new Queue<byte>();
             Reset();

@@ -25,7 +25,7 @@ using Antmicro.Renode.UserInterface;
 
 namespace Antmicro.Renode.Peripherals.Sensors
 {
-    public class TemperatureSensor : II2CPeripheral, ITemperatureSensor,IExternal
+    public class TemperatureSensor : II2CPeripheral, ITemperatureMODSensor,IExternal
     {
         public TemperatureSensor()
         {

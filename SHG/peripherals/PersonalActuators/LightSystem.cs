@@ -13,9 +13,9 @@ using Antmicro.Renode.UserInterface;
 
 namespace Antmicro.Renode.Peripherals.Actuator
 {
-    public class HeatingSystem : II2CPeripheral, IHeatingSystem,IExternal
+    public class LightSystem : II2CPeripheral, ILightSystem,IExternal
     {
-        public HeatingSystem()
+        public LightSystem()
         {
             outputBuffer = new Queue<byte>();
             Reset();

@@ -8,7 +8,7 @@
 namespace Antmicro.Renode.Peripherals.Sensor
 {
 
-    public interface IHumiditySensor : ISensor
+    public interface IHumidityMODSensor : ISensor
     {
        uint Humidity { get; set; }
     }

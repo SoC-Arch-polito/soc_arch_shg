@@ -8,7 +8,7 @@
 namespace Antmicro.Renode.Peripherals.Sensor
 {
 
-    public interface ITemperatureSensor : ISensor
+    public interface ITemperatureMODSensor : ISensor
     {
        uint Temperature { get; set; }
     }
