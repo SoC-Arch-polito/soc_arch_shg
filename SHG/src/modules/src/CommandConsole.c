@@ -12,10 +12,7 @@
 #include <tm_stm32_i2c.h>
 #include <string.h>
 #include <stdio.h>
-#define WELCOME_STRING "******Welcome! This is the Smart Hydroponic Greenhouse!******\n\r"
-#define PRESENTATION_STRING "This is the Command Console of the SHG, write 'help' to have the list of available commands.\n\r"
-#define UNKNOWNCOMMAND "Command not recognized, please write an available command, to have the list use the command 'help'."
-#define COMMANDLENGTH 12
+
 /* USER CODE BEGIN Header_CommandConsole */
 /**
 * @brief Function implementing the UartRX thread.
@@ -54,7 +51,10 @@ void CommandConsole(void const * argument)
   for(;;)
   {
     //to get the command
-    TM_USART_Gets(USART2, comm, COMMANDLENGTH + 1);
+    while((TM_USART_Gets(USART2, comm, COMMANDLENGTH + 1)) == 0){
+      osDelay(10000);
+    }
+
     //in base on the command we do a different stuff
     cmd = ParseCommand(comm);
     switch (cmd){
@@ -102,9 +102,9 @@ enum command ParseCommand(char* cmd) {
     } else if(strcmp(cmd, "stop") == 0){
       SHG_cmd = stop;
     } else if(strcmp(cmd, "setThs") == 0){
-      SHG_cmd = setTresholds;
+      SHG_cmd = setThs;
     } else if(strcmp(cmd, "getThs") == 0){
-      SHG_cmd = setTresholds;
+      SHG_cmd = getThs;
     } else if(strcmp(cmd, "stop") == 0){
       SHG_cmd = stop;
     }
