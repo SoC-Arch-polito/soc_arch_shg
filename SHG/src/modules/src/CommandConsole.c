@@ -13,6 +13,7 @@
 #include <string.h>
 #include <stdio.h>
 #define WELCOME_STRING "******Welcome! This is the Smart Hydroponic Greenhouse!******\n\r"
+#define PRESENTATION_STRING "Write 'help' to have the list of available commands.\n\r"
 
 /* USER CODE BEGIN Header_CommandConsole */
 /**
@@ -30,19 +31,18 @@
 - clear         -> clear the UART command line;
 - help          -> to show the available commands;
 - stop          -> pause the SHG;
-- setTresholds  -> force the three thresholds to a user defined thresholds;
+- setThs  -> force the three thresholds to a user defined thresholds;
 - getTresholds  -> print the three thresholds to the user;
 - reset         -> reset to the default state of the machine;
 */
 /***********************************************/
-
-
 
 void CommandConsole(void const * argument)
 {
   enum command  SHG_cmd = stop; //DEFAULT VALUE
   //stamp to UART2 the welcome string
   TM_USART_Puts(USART2,WELCOME_STRING);
+  TM_USART_Puts(USART2,PRESENTATION_STRING);
   
   /* USER CODE BEGIN CommandConsole */
   /* Infinite loop */
