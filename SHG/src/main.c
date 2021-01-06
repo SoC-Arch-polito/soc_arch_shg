@@ -1,236 +1,192 @@
-#include <stm32f4xx_hal.h>
-#include <defines.h>
-#include <tm_stm32_disco.h>
-#include <tm_stm32_spi.h>
-#include <tm_stm32_usart.h>
-#include <tm_stm32_i2c.h>
-#include <string.h>
-#include <stdio.h>
-#include <FreeRTOS.h>
-#include <stm32f4xx.h>
-#include <task.h>
+/* USER CODE BEGIN Header */
+/**
+  ******************************************************************************
+  * @file           : main.c
+  * @brief          : Main program body
+  ******************************************************************************
+  * @attention
+  *
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
+  * All rights reserved.</center></h2>
+  *
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                             www.st.com/SLA0044
+  *
+  ******************************************************************************
+  */
+/* USER CODE END Header */
+/* Includes ------------------------------------------------------------------*/
+#include "./FreeRTOS-CMSIS/main.h"
+#include "./FreeRTOS-CMSIS/cmsis_os.h"
+#include "./FreeRTOS-CMSIS/i2c.h"
+#include "./FreeRTOS-CMSIS/usart.h"
+#include "./FreeRTOS-CMSIS/gpio.h"
 
+/* Private includes ----------------------------------------------------------*/
+/* USER CODE BEGIN Includes */
 
+/* USER CODE END Includes */
 
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
 
-#define LIGHT_SENSOR_ADDRESS (0x04<<1)
-#define TEMPHUM_SENSOR_ADDRESS (0x02<<1)
-#define HEATINGS_ACTUATOR_ADDRESS (0x02<<1)
-#define LED_PIN                                GPIO_PIN_5
-#define LED_GPIO_PORT                          GPIOA
-#define LED_GPIO_CLK_ENABLE()                  __HAL_RCC_GPIOA_CLK_ENABLE()
+/* USER CODE END PTD */
 
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+/* USER CODE END PD */
 
-#define CCM_RAM __attribute__((section(".ccmram")))
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
 
-uint8_t Transmit[15], Receive[15];
+/* USER CODE END PM */
 
+/* Private variables ---------------------------------------------------------*/
 
-#define H_TASK_STACK_SIZE 256
+/* USER CODE BEGIN PV */
 
-StackType_t fpuTaskStack[H_TASK_STACK_SIZE] CCM_RAM;  // Put task stack in CCM
-StaticTask_t fpuTaskBuffer CCM_RAM;  // Put TCB in CCM
+/* USER CODE END PV */
 
-StackType_t fpuTaskStack2[H_TASK_STACK_SIZE] CCM_RAM;  // Put task stack in CCM
-StaticTask_t fpuTaskBuffer2 CCM_RAM;  // Put TCB in CCM
+/* Private function prototypes -----------------------------------------------*/
+void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
+/* USER CODE BEGIN PFP */
 
-void test_FPU_test(void* p);
+/* USER CODE END PFP */
 
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
 
-void HeatingSystemOUT();
-void HeatingSystemOUT2();
+/* USER CODE END 0 */
 
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
-  TM_RCC_InitSystem();
+  /* USER CODE BEGIN 1 */
+
+  /* USER CODE END 1 */
+
+  /* MCU Configuration--------------------------------------------------------*/
+
+  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
 
-  TM_USART_Init(USART1, TM_USART_PinsPack_1, 9600);
-  TM_USART_Init(USART2, TM_USART_PinsPack_2, 9600);
+  /* USER CODE BEGIN Init */
 
+  /* USER CODE END Init */
 
+  /* Configure the system clock */
+  SystemClock_Config();
 
+  /* USER CODE BEGIN SysInit */
 
+  /* USER CODE END SysInit */
 
+  /* Initialize all configured peripherals */
+  MX_GPIO_Init();
+  MX_I2C1_Init();
+  MX_I2C2_Init();
+  MX_USART1_UART_Init();
+  MX_USART2_UART_Init();
+  /* USER CODE BEGIN 2 */
 
-  xTaskCreateStatic(HeatingSystemOUT, "Name1", H_TASK_STACK_SIZE, NULL, 1, fpuTaskStack, &fpuTaskBuffer);
-  xTaskCreateStatic(HeatingSystemOUT2, "Name2", H_TASK_STACK_SIZE, NULL, 1, fpuTaskStack2, &fpuTaskBuffer2);
+  /* USER CODE END 2 */
 
+  /* Call init function for freertos objects (in freertos.c) */
+  MX_FREERTOS_Init();
+  /* Start scheduler */
+  osKernelStart();
 
-  printf("System Started!\n");
-  vTaskStartScheduler();  // should never return
-
-  for (;;);
-
-
-  /*
-  uint8_t i=0;
-
-  TM_RCC_InitSystem();
-  HAL_Init();
-
-  TM_DISCO_LedInit();
-
-  TM_SPI_Init(SPI2, TM_SPI_PinsPack_2);
-  TM_USART_Init(USART1, TM_USART_PinsPack_2, 9600);
-
-  TM_I2C_Init(I2C2, TM_I2C_PinsPack_2, TM_I2C_CLOCK_STANDARD);
-  TM_I2C_Init(I2C1, TM_I2C_PinsPack_1, TM_I2C_CLOCK_STANDARD);
-
-uint8_t READED=0xFF;
-char buffer[1024];
-//TEST READING AND WRITING VALUE ON THE ACTUATOR
- if(TM_I2C_IsDeviceConnected(I2C2, HEATINGS_ACTUATOR_ADDRESS)==TM_I2C_Result_Ok){
-   while(1){
-  //Disabled
-  if(TM_I2C_IsDeviceConnected(I2C1, LIGHT_SENSOR_ADDRESS)==TM_I2C_Result_Ok){
-    while(READED!=100){
-      HAL_Delay(1000);
-      TM_I2C_ReadNoRegister(I2C1, LIGHT_SENSOR_ADDRESS, &READED);
-      snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Light Sensor value: %d\n\r",READED);
-      TM_USART_Puts(USART1,buffer);
-    }
-    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Light Sensor EXIT\n\r");
-      TM_USART_Puts(USART1,buffer);
-  }
-  else
-  {
-    TM_USART_Puts(USART1,"[SHG:ERROR]: NO LIGHT SENSOR FOUND\n\r");
-  }
-
-  uint8_t data[2];
-  uint8_t reciv[2];
-  data[0]=0;
-  data[1]=7;
-
-  while(1){
-      TM_I2C_WriteMultiNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS,data,3); 
-      HAL_Delay(1000);
-      TM_I2C_ReadMultiNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS, reciv,3);
-      HeatingSystemOUT(reciv);
-  }
-
-  HAL_Delay(10);  
-//ENABLED
-  TM_I2C_WriteNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS,0x01);
-  TM_I2C_ReadNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS, &READED);
-  HeatingSystemOUT(READED);
-  
-  HAL_Delay(10);
-//ERROR
-  TM_I2C_WriteNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS,0x15);
-  TM_I2C_ReadNoRegister(I2C2, HEATINGS_ACTUATOR_ADDRESS, &READED);
-  HeatingSystemOUT(READED);
-   }
- }else
- {
-   TM_USART_Puts(USART1,"[SHG:ERROR]: NO HS FOUND\n\r");
- }
- 
-
-
-  TM_I2C_Write(I2C2, 0x00, 0xE5,0x12);
-
-  LED_GPIO_CLK_ENABLE();
-  
-  GPIO_InitTypeDef GPIO_InitStruct;
-  
-  GPIO_InitStruct.Pin = LED_PIN;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_HIGH;
-  HAL_GPIO_Init(LED_GPIO_PORT, &GPIO_InitStruct); 
-
+  /* We should never get here as control is now taken by the scheduler */
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
   while (1)
   {
-    HAL_GPIO_TogglePin(LED_GPIO_PORT, LED_PIN);
-    
-    HAL_Delay(1000);
+    /* USER CODE END WHILE */
 
-    TM_USART_Puts(USART1, "hello world.\n\r");
-
-       
-    Transmit[i] = i;
-        
-   
-    Receive[i] = TM_SPI_Send(SPI2, Transmit[i]);
-    
-    i=i+1;
-
+    /* USER CODE BEGIN 3 */
   }
+  /* USER CODE END 3 */
+}
+
+/**
+  * @brief System Clock Configuration
+  * @retval None
   */
-}
+void SystemClock_Config(void)
+{
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
 
-void vApplicationGetIdleTaskMemory( StaticTask_t ** ppxIdleTaskTCBBuffer,
-                                               StackType_t ** ppxIdleTaskStackBuffer,
-                                               uint32_t * pulIdleTaskStackSize ){
-                                                 return;
-                                               }
-
-void HeatingSystemOUT(){
-   char buffer[1024];
-  uint8_t READED[2];
-  READED[0]=0;
-  READED[1]=7;
-  while(1){
-  if(READED[0]==0x00){
-    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: OFF value %d\n\r",READED[1]);
-  }
-  else if(READED[0]==0x01){
-    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: ON %d\n\r",READED[1]);
-  }else
+  /** Configure the main internal regulator output voltage
+  */
+  __HAL_RCC_PWR_CLK_ENABLE();
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
-    snprintf(buffer, sizeof(buffer), "[SHG:ERROR]: Heating System status: OFF(forced) %d\n\r",READED[1]);
+    Error_Handler();
   }
-  TM_USART_Puts(USART1,buffer);
-  }
-}
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSI;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-void HeatingSystemOUT2(){
-   char buffer[1024];
-  uint8_t READED[2];
-  READED[0]=0;
-  READED[1]=7;
-  while(1){
-  if(READED[0]==0x00){
-    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: OFF value %d\n\r",READED[1]);
-  }
-  else if(READED[0]==0x01){
-    snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Heating System status: ON %d\n\r",READED[1]);
-  }else
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
   {
-    snprintf(buffer, sizeof(buffer), "[SHG:ERROR]: Heating System status: OFF(forced) %d\n\r",READED[1]);
-  }
-  TM_USART_Puts(USART2,buffer);
+    Error_Handler();
   }
 }
 
-void NMI_Handler(void)
+/* USER CODE BEGIN 4 */
+
+/* USER CODE END 4 */
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
+void Error_Handler(void)
 {
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  while (1)
+  {
+  }
+  /* USER CODE END Error_Handler_Debug */
 }
 
-void HardFault_Handler(void)
+#ifdef  USE_FULL_ASSERT
+/**
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
 {
-  while (1) {}
+  /* USER CODE BEGIN 6 */
+  /* User can add his own implementation to report the file name and line number,
+     ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
+  /* USER CODE END 6 */
 }
+#endif /* USE_FULL_ASSERT */
 
-
-void MemManage_Handler(void)
-{
-  while (1) {}
-}
-
-void BusFault_Handler(void)
-{
-  while (1) {}
-}
-
-void UsageFault_Handler(void)
-{
-  while (1) {}
-}
-
-void DebugMon_Handler(void)
-{
-}
-
+/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
