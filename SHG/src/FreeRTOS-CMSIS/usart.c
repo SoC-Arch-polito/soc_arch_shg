@@ -19,7 +19,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usart.h"
-
+#include <tm_stm32_usart.h>
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
@@ -31,7 +31,7 @@ UART_HandleTypeDef huart2;
 
 void MX_USART1_UART_Init(void)
 {
-
+/*
   huart1.Instance = USART1;
   huart1.Init.BaudRate = 115200;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
@@ -43,14 +43,14 @@ void MX_USART1_UART_Init(void)
   if (HAL_UART_Init(&huart1) != HAL_OK)
   {
     Error_Handler();
-  }
-
+  }*/
+  TM_USART_Init(USART1, TM_USART_PinsPack_2, 9600);
 }
 /* USART2 init function */
 
 void MX_USART2_UART_Init(void)
 {
-
+/*
   huart2.Instance = USART2;
   huart2.Init.BaudRate = 115200;
   huart2.Init.WordLength = UART_WORDLENGTH_8B;
@@ -62,8 +62,8 @@ void MX_USART2_UART_Init(void)
   if (HAL_UART_Init(&huart2) != HAL_OK)
   {
     Error_Handler();
-  }
-
+  }*/
+  TM_USART_Init(USART1, TM_USART_PinsPack_2, 9600);
 }
 
 void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
