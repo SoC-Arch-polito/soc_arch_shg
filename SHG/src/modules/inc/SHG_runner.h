@@ -5,6 +5,9 @@
     void SHG_start();
     void SHG_stop();
     void SHG_rst();
+    int SHG_getHeatingSystemStatus();
+    int SHG_getWaterSystemStatus();
+    int SHG_getLightSystemStatus();
     int SHG_getTemperature();
     int SHG_getLight();
     int SHG_getHumidity();    
