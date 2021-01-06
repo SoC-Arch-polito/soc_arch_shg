@@ -1,4 +1,4 @@
-#include "../inc/OutputConsolle.h"
+#include "../inc/OutputConsole.h"
 #include "../../FreeRTOS-CMSIS/FreeRTOS.h"
 #include "../../FreeRTOS-CMSIS/task.h"
 #include "../..//FreeRTOS-CMSIS/main.h"
@@ -11,25 +11,25 @@
 #include <tm_stm32_i2c.h>
 #include <string.h>
 #include <stdio.h>
-/* USER CODE BEGIN Header_OutputConsolle */
+/* USER CODE BEGIN Header_OutputConsole */
 /**
 * @brief Function implementing the UartTX thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_OutputConsolle */
+/* USER CODE END Header_OutputConsole */
 
-void OutputConsolle(void const * argument)
+void OutputConsole(void const * argument)
 {
   
 
-  /* USER CODE BEGIN OutputConsolle */
+  /* USER CODE BEGIN OutputConsole */
   /* Infinite loop */
   for(;;)
   {
     TM_USART_Puts(USART1,"UART1 NEUROMORPHIC PURE IOO\n\r");
     osDelay(1000);
   }
-  /* USER CODE END OutputConsolle */
+  /* USER CODE END OutputConsole */
 }
 

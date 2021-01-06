@@ -23,8 +23,8 @@
 #include "./FreeRTOS-CMSIS/task.h"
 #include "./FreeRTOS-CMSIS/main.h"
 #include "./FreeRTOS-CMSIS/cmsis_os.h"
-#include "./modules/inc/CommandConsolle.h"
-#include "./modules/inc/OutputConsolle.h"
+#include "./modules/inc/CommandConsole.h"
+#include "./modules/inc/OutputConsole.h"
 #include "./modules/inc/SHG_runner.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -114,11 +114,11 @@ void MX_FREERTOS_Init(void) {
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of UartRX */
-  osThreadDef(UartRX, CommandConsolle, osPriorityNormal, 0, 128);
+  osThreadDef(UartRX, CommandConsole, osPriorityNormal, 0, 128);
   UartRXHandle = osThreadCreate(osThread(UartRX), NULL);
 
   /* definition and creation of UartTX */
-  osThreadDef(UartTX, OutputConsolle, osPriorityNormal, 0, 128);
+  osThreadDef(UartTX, OutputConsole, osPriorityNormal, 0, 128);
   UartTXHandle = osThreadCreate(osThread(UartTX), NULL);
 
   /* definition and creation of SHG_core */
