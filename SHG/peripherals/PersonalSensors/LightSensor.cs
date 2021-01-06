@@ -48,12 +48,12 @@ namespace Antmicro.Renode.Peripherals.Sensors
         public void Write(byte[] data)
         {
             this.Log(LogLevel.Noisy, "Received {0} bytes: [{1}]", data.Length, string.Join(", ", data.Select(x => x.ToString())));
-            if(!commands.TryGetCommand(data, out var command))
-            {
-                this.Log(LogLevel.Warning, "Unknown command: [{0}]. Ignoring the data.", string.Join(", ", data.Select(x => string.Format("0x{0:X}", x))));
-                return;
-            }
-            command(data);
+          //  if(!commands.TryGetCommand(data, out var command))
+          //  {
+          //      this.Log(LogLevel.Warning, "Unknown command: [{0}]. Ignoring the data.", string.Join(", ", data.Select(x => string.Format("0x{0:X}", x))));
+          //      return;
+          // }
+          //  command(data);
         }
 
         public void Reset()
