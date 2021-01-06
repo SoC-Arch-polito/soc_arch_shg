@@ -4,6 +4,10 @@
 using sysbus
 $name?="STM32F4_Discovery"
 mach create $name
+include @./peripherals/PersonalActuators/IHeatingSystem.cs
+include @./peripherals/PersonalActuators/HeatingSystem.cs
+include @./peripherals/PersonalSensors/ILightSensor.cs
+include @./peripherals/PersonalSensors/LightSensor.cs
 machine LoadPlatformDescription @platforms/boards/stm32f4_discovery-kit.repl
 machine LoadPlatformDescription @./peripherals/peripheral_definition.repl
 machine LoadPlatformDescription @./peripherals/ext_peripheral.repl
