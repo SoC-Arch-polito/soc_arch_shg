@@ -230,7 +230,7 @@ int main(void) {
 	TM_DISCO_ButtonInit();
 	
 	/* Init USART, TX: PC6, RX: PC7, 921600 bauds */
-	TM_USART_Init(USART2, TM_USART_PinsPack_1, 921600);
+	TM_USART_Init(USART2, TM_USART_PinsPack_1, 115200);
 	
 	/* Put test string */
 	TM_USART_Puts(USART2, "Hello world\n");
@@ -241,6 +241,7 @@ int main(void) {
 		if (TM_USART_Gets(USART2, mybuffer, sizeof(mybuffer))) {
 			/* Send string back */
 			TM_USART_Puts(USART2, mybuffer);
+      HAL_Delay(1000);
 		}
 	}
 }

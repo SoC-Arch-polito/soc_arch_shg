@@ -19,7 +19,8 @@ include @./peripherals/PersonalSensors/HumiditySensor.cs
 machine LoadPlatformDescription @platforms/boards/stm32f4_discovery-kit.repl
 machine LoadPlatformDescription @./peripherals/peripheral_definition.repl
 machine LoadPlatformDescription @./peripherals/ext_peripheral.repl
-
+emulation CreateServerSocketTerminal 1234 "externalUART"
+connector Connect uart2 externalUART
 showAnalyzer uart1
 showAnalyzer uart2
 alias Temperature "i2c1.TempHumSensor Temperature"
