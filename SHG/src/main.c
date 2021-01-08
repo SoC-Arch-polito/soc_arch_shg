@@ -23,6 +23,8 @@
 #include "./FreeRTOS-CMSIS/i2c.h"
 #include "./FreeRTOS-CMSIS/usart.h"
 #include "./FreeRTOS-CMSIS/gpio.h"
+#include "./FreeRTOS-CMSIS/dma.h"
+
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -89,6 +91,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_I2C1_Init();
   MX_I2C2_Init();
   MX_USART1_UART_Init();
