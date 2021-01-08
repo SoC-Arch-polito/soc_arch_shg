@@ -38,7 +38,6 @@
 
 // receive the command and return the related enum
 enum command ParseCommand(char* cmd);
-char rxData[40];
 void CommandConsole(void const * argument)
 {
   enum command cmd;
@@ -47,7 +46,6 @@ void CommandConsole(void const * argument)
   TM_USART_Puts(USART2,WELCOME_STRING);
   TM_USART_Puts(USART2,PRESENTATION_STRING);
   
-  HAL_UART_Receive_DMA(&huart2, (uint8_t *)rxData, 10);
   /* USER CODE BEGIN CommandConsole */
   /* Infinite loop */
   
@@ -104,16 +102,7 @@ void CommandConsole(void const * argument)
 //   }
 //   /* USER CODE END CommandConsole */
 }
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-  /* Prevent unused argument(s) compilation warning */
-  UNUSED(huart);
-  /* NOTE: This function Should not be modified, when the callback is needed,
-           the HAL_UART_TxCpltCallback could be implemented in the user file
-   */
-	HAL_UART_Transmit(&huart2, (uint8_t *)rxData, strlen(rxData), 10);
-	
-}
+
 enum command ParseCommand(char* cmd) {
     enum command  SHG_cmd = error; //DEFAULT VALUE
     if(strcmp(cmd, "start") == 0){
