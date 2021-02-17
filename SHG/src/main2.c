@@ -98,6 +98,14 @@
 //     TM_USART_Puts(USART1,"[SHG:ERROR]: NO LIGHT SENSOR FOUND\n\r");
 //   }
 
+
+
+
+
+
+
+
+
 //   uint8_t data[2];
 //   uint8_t reciv[2];
 //   data[0]=0;

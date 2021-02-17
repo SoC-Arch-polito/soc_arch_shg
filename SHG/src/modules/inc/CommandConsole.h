@@ -20,7 +20,7 @@
 /***********************************************/
 // Shared Variable used to set the command.
 enum command {
-  start, log, status, clear, help, stop, setThs, getThs, reset, error
+  idle, start, log, status, clear, help, stop, setThs, getThs, reset, error
 }; 
 
     void CommandConsole(void const * argument);

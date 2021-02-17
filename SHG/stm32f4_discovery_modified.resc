@@ -14,6 +14,8 @@ include @./peripherals/PersonalSensors/ILightSensor.cs
 include @./peripherals/PersonalSensors/LightSensor.cs
 include @./peripherals/PersonalSensors/ITemperatureMODSensor.cs
 include @./peripherals/PersonalSensors/TemperatureSensor.cs
+include @./peripherals/PersonalSensors/IBluetoothRx.cs
+include @./peripherals/PersonalSensors/BluetoothRx.cs
 include @./peripherals/PersonalSensors/IHumidityMODSensor.cs
 include @./peripherals/PersonalSensors/HumiditySensor.cs
 machine LoadPlatformDescription @platforms/boards/stm32f4_discovery-kit.repl
@@ -27,6 +29,8 @@ alias Temperature "i2c1.TempHumSensor Temperature"
 alias Humidity "i2c1.TempHumSensor Temperature"
 alias Light "i2c1.LightSensor Light"
 alias Heating "i2c2.HeatingS Active" 
+alias Command "i2c1.BluetoothRx Command"
+
 
 
 

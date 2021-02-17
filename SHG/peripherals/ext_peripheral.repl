@@ -2,6 +2,8 @@ TemperatureSensor: Sensors.TemperatureSensor @i2c1 0x02
 LightSensor: Sensors.LightSensor @i2c1 0x04
 HumidityeSensor: Sensors.HumiditySensor @i2c1 0x08
 
+BluetoothRx: Sensors.BluetoothRx @i2c1 0x10
+
 HeatingSystem: Actuator.HeatingSystem @i2c2 0x02
 LightSystem: Actuator.LightSystem @i2c2 0x04
 WaterSystem: Actuator.WaterSystem @i2c2 0x08

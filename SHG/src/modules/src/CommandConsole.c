@@ -14,6 +14,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#define BLUETOOTH_RX_ADDRESS (0x10<<1)
 /* USER CODE BEGIN Header_CommandConsole */
 /**
 * @brief Function implementing the UartRX thread.
@@ -37,91 +38,91 @@
 /***********************************************/
 
 // receive the command and return the related enum
-enum command ParseCommand(char* cmd);
+enum command ParseCommand(uint8_t cmd);
 void CommandConsole(void const * argument)
 {
   enum command cmd;
-  char comm[COMMANDLENGTH];
+  uint8_t comm=0;
   //stamp to UART2 the welcome string
   TM_USART_Puts(USART2,WELCOME_STRING);
   TM_USART_Puts(USART2,PRESENTATION_STRING);
   
   /* USER CODE BEGIN CommandConsole */
   /* Infinite loop */
-  
-  char in[8]; 
-  char c;
-  for(;;)
-  {
-    HAL_Delay(500);
-  }
 
-// // look here decoment this ;) dopo tot secondi ti fa vedere ciò che ha letto
-//     while (1){
-//       //TM_USART_Puts(USART2,"test\n\r");
-
-//       //FUNZIONA MA NON Vedi ciò che scrivi
-  
-//       // while(HAL_UART_Receive(&huart2, (uint8_t *)in, 8,10000)==HAL_BUSY);
-//       //   TM_USART_Puts(USART2,"  RICEVUTO ");
-//       //   TM_USART_Puts(USART2,in);     
-//       //   TM_USART_Puts(USART2,"\n\r");  
     
+  if(TM_I2C_IsDeviceConnected(I2C1, BLUETOOTH_RX_ADDRESS)==TM_I2C_Result_Ok){
+while(1){
+       TM_I2C_ReadNoRegister(I2C1, BLUETOOTH_RX_ADDRESS, &comm);
+//       snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Light Sensor value: %d\n\r",READED);
+//       TM_USART_Puts(USART1,buffer);
 //     }
-//     /* Waiting for \n at the end of string */
-//     if(TM_USART_Gets(USART2, comm, sizeof(comm))){
-//       //in base on the command we do a different stuff
-//       cmd = ParseCommand(comm);
-//       switch (cmd){
-//         case start:
-//           TM_USART_Puts(USART2,WELCOME_STRING);
-//           break;
-//         case log:
-//           break;
-//         case status:
-//           break;
-//         case clear:
-//           break;
-//         case help:
-//           break;
-//         case stop:
-//           break;
-//         case setThs:
-//           break;
-//         case getThs:
-//           break;
-//         case reset:
-//           break;
-//         default:
-//           TM_USART_Puts(USART2,UNKNOWNCOMMAND);
-//           break;
-//       }
-//     }
-//     TM_USART_Puts(USART2,"UART2 NEUROMORPHIC PURE IOO\n\r");
-//     osDelay(1000);
+//     snprintf(buffer, sizeof(buffer), "[SHG:INFO]: Light Sensor EXIT\n\r");
+//       TM_USART_Puts(USART1,buffer);
 //   }
+//   else
+//   {
+//     TM_USART_Puts(USART1,"[SHG:ERROR]: NO LIGHT SENSOR FOUND\n\r");
+   
+
+
+       cmd = ParseCommand(comm);
+       switch (cmd){
+         case idle:
+         TM_USART_Puts(USART2,"GIANNI\n");
+           break;
+         case start:
+           TM_USART_Puts(USART2,WELCOME_STRING);
+           break;
+         case log:
+           break;
+         case status:
+           break;
+         case clear:
+           break;
+         case help:
+           break;
+         case stop:
+           break;
+         case setThs:
+           break;
+         case getThs:
+           break;
+         case reset:
+           break;
+         default:
+           TM_USART_Puts(USART2,UNKNOWNCOMMAND);
+           break;
+       }
+     osDelay(1000);
+   }
 //   /* USER CODE END CommandConsole */
+  } else {
+    TM_USART_Puts(USART2,UNKNOWNCOMMAND);
+  }
 }
 
-enum command ParseCommand(char* cmd) {
+enum command ParseCommand(uint8_t cmd) {
     enum command  SHG_cmd = error; //DEFAULT VALUE
-    if(strcmp(cmd, "start") == 0){
+    if(cmd == 0){
+      SHG_cmd=idle;
+    } else if(cmd == 1){
       SHG_cmd = start;
-    } else if(strcmp(cmd, "log") == 0){
+    } else if(cmd == 2){
       SHG_cmd = log;
-    } else if(strcmp(cmd, "status") == 0){
+    } else if(cmd == 3){
       SHG_cmd = status;
-    } else if(strcmp(cmd, "clear") == 0){
+    } else if(cmd == 4){
       SHG_cmd = clear;
-    } else if(strcmp(cmd, "help") == 0){
+    } else if(cmd == 5){
       SHG_cmd = help;
-    } else if(strcmp(cmd, "stop") == 0){
+    } else if(cmd == 6){
       SHG_cmd = stop;
-    } else if(strcmp(cmd, "setThs") == 0){
+    } else if(cmd == 7){
       SHG_cmd = setThs;
-    } else if(strcmp(cmd, "getThs") == 0){
+    } else if(cmd == 8){
       SHG_cmd = getThs;
-    } else if(strcmp(cmd, "stop") == 0){
+    } else if(cmd == 9){
       SHG_cmd = stop;
     }
     return SHG_cmd;
