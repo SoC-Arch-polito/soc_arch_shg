@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #ifndef _SHG_RUNNER_H
 #define _SHG_RUNNER_H
 
@@ -5,12 +6,15 @@
     void SHG_start();
     void SHG_stop();
     void SHG_rst();
-    int SHG_getHeatingSystemStatus();
-    int SHG_getWaterSystemStatus();
-    int SHG_getLightSystemStatus();
+    void SHG_connect();
+    bool SHG_getHeatingSystemStatus();
+    bool SHG_getWaterSystemStatus();
+    bool SHG_getLightSystemStatus();
     int SHG_getTemperature();
     int SHG_getLight();
     int SHG_getHumidity();    
+    bool SHG_getPowered();
+    bool SHG_getPairStatus();
     int SHG_getTresholdTemperature();
     int SHG_getTresholdHumidity();
     int SHG_getTresholdLight();

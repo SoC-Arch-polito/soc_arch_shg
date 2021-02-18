@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "commandconsole.h": "c"
+        "commandconsole.h": "c",
+        "shg_runner.h": "c"
     }
 }
