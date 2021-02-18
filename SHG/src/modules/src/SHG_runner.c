@@ -23,10 +23,6 @@
 
 static bool powered=OFF;
 
-static bool lightSys=OFF;
-static bool waterSys=OFF;
-static bool heatingSys=OFF;
-
 static bool paired=NOT_OK;
 
 static int hum_thrs=0;
