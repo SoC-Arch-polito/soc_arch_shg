@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "commandconsole.h": "c",
-        "shg_runner.h": "c"
+        "shg_runner.h": "c",
+        "freertos.h": "c"
     }
 }

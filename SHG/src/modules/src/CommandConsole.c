@@ -61,28 +61,20 @@ if(TM_I2C_IsDeviceConnected(I2C1, BLUETOOTH_RX_ADDRESS)==TM_I2C_Result_Ok){
       cmd = ParseCommand(comm);
       if(cmd == status){}
         //bla bla
-      if(!repeated && (cmd != status)){
+      if(cmd == pair && !paired && !repeated){
+          TM_USART_Puts(USART2,"The Device is paired!\n");
+          paired = 1;
+      }
+      if(cmd == wait_pair && !paired && !repeated){
+          TM_USART_Puts(USART2,"The Device is pairing with the user...\n");
+      }
+      if(!repeated && paired && (cmd != status) && cmd != wait_pair && cmd != pair){
        switch (cmd){
-         case wait_pair:
-          if(!paired){
-            //pairing...ADD TO USART1
-            TM_USART_Puts(USART2,"The Device is pairing with the user...\n");
-          }
-           break;
-         case pair:
-          if(!paired){
-            //device paired ADD TO USART1
-            TM_USART_Puts(USART2,"The Device is paired!\n");
-            paired = 1;
-          }
-           break;
          case start:
           if(!already_started)
            TM_USART_Puts(USART2,WELCOME_STRING);
            TM_USART_Puts(USART2,PRESENTATION_STRING);
           already_started = 1;
-           break;
-         case status:
            break;
          case clear:
            break;

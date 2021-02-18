@@ -3,8 +3,15 @@
 #include "../../FreeRTOS-CMSIS/task.h"
 #include "../..//FreeRTOS-CMSIS/main.h"
 #include "../../FreeRTOS-CMSIS/cmsis_os.h"
+#include <tm_stm32_i2c.h>
 
 
+#define TEMP_SENSOR_ADDRESS (0x02<<1)
+#define LIGHT_SENSOR_ADDRESS (0x04<<1)
+#define HUM_SENSOR_ADDRESS (0x08<<1)
+#define HEATING_ADDRESS (0x02<<1)
+#define LIGHT_SYS_ADDRESS (0x04<<1)
+#define WATER_SYS_ADDRESS (0x08<<1)
 
 #define ON 1
 #define OFF 0
@@ -73,17 +80,52 @@ void SHG_runner(void const * argument)
       paired=OK;
     }
 
-    bool SHG_getHeatingSystemStatus(){}
-    bool SHG_getWaterSystemStatus();
-    bool SHG_getLightSystemStatus();
-    int SHG_getTemperature();
-    int SHG_getLight();
-    int SHG_getHumidity();    
-    bool SHG_getPowered();
-    bool SHG_getPairStatus();
-    int SHG_getTresholdTemperature();
-    int SHG_getTresholdHumidity();
-    int SHG_getTresholdLight();
-    void SHG_setTresholdTemperature(int Temperature);
-    void SHG_setTresholdHumidity(int Humidity);
-    void SHG_setTresholdLight(int Light);
+    bool SHG_getHeatingSystemStatus(){
+      return heatingSys;
+    }
+    bool SHG_getWaterSystemStatus(){
+      return waterSys;
+    }
+    bool SHG_getLightSystemStatus(){
+      return lightSys;
+    }
+
+    int SHG_getTemperature(){
+      uint8_t value;
+      if(TM_I2C_IsDeviceConnected(I2C1, TEMP_SENSOR_ADDRESS)==TM_I2C_Result_Ok){
+        TM_I2C_ReadNoRegister(I2C1, TEMP_SENSOR_ADDRESS, &value);
+      }
+    }
+    int SHG_getLight(){
+
+    }
+    int SHG_getHumidity(){
+
+    }
+
+    bool SHG_getPowered(){
+      return powered;
+    }
+    bool SHG_getPairStatus(){
+      return paired;
+    }
+
+    int SHG_getTresholdTemperature(){
+      return temp_thrs;
+    }
+    int SHG_getTresholdHumidity(){
+      return hum_thrs;
+    }
+    int SHG_getTresholdLight(){
+      return light_thrs;
+    }
+    void SHG_setTresholdTemperature(int Temperature){
+      temp_thrs=Temperature;
+      return;
+    }
+    void SHG_setTresholdHumidity(int Humidity){
+      hum_thrs=Humidity;
+    }
+    void SHG_setTresholdLight(int Light){
+      light_thrs=Light;
+    }
