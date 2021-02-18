@@ -74,8 +74,8 @@ void SHG_runner(void const * argument)
     }
 
     bool SHG_getHeatingSystemStatus(){}
-    int SHG_getWaterSystemStatus();
-    int SHG_getLightSystemStatus();
+    bool SHG_getWaterSystemStatus();
+    bool SHG_getLightSystemStatus();
     int SHG_getTemperature();
     int SHG_getLight();
     int SHG_getHumidity();    
