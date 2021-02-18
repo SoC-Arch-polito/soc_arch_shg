@@ -21,5 +21,11 @@
     void SHG_setTresholdTemperature(int Temperature);
     void SHG_setTresholdHumidity(int Humidity);
     void SHG_setTresholdLight(int Light);
+    void SHG_heatingSystemOn();
+    void SHG_waterSystemOn();
+    void SHG_lightSystemOn();
+    void SHG_heatingSystemOff();
+    void SHG_waterSystemOff();
+    void SHG_lightSystemOff();
 
 #endif

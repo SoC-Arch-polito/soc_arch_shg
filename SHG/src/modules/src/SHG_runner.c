@@ -48,17 +48,17 @@ void SHG_runner(void const * argument)
   {
     if(powered=ON){
      if(SHG_getTemperature()<temp_thrs)
-        heatingSys=ON;
+       SHG_heatingSystemOn();
       else
-        heatingSys=OFF;
-      if(SHG_getHumidity()<temp_thrs)
-        waterSys=ON;
+        SHG_heatingSystemOff();
+      if(SHG_getHumidity()<hum_thrs)
+        SHG_waterSystemOn();
       else
-        waterSys=OFF;
-      if(SHG_getLight()<temp_thrs)
-        lightSys=ON;
+        SHG_waterSystemOff();
+      if(SHG_getLight()<light_thrs)
+        SHG_lightSystemOn();
       else
-        lightSys=OFF;
+        SHG_lightSystemOff();
     }
     osDelay(1);
   }
@@ -95,12 +95,18 @@ void SHG_runner(void const * argument)
     }
 
     bool SHG_getHeatingSystemStatus(){
+      if(TM_I2C_IsDeviceConnected(I2C2, HEATING_ADDRESS)==TM_I2C_Result_Ok){
+        TM_I2C_ReadNoRegister(I2C2, HEATING_ADDRESS, &heatingSys);
       return heatingSys;
     }
     bool SHG_getWaterSystemStatus(){
+      if(TM_I2C_IsDeviceConnected(I2C2, WATER_SYS_ADDRESS)==TM_I2C_Result_Ok){
+        TM_I2C_ReadNoRegister(I2C2, WATER_SYS_ADDRESS, &waterSys);
       return waterSys;
     }
     bool SHG_getLightSystemStatus(){
+      if(TM_I2C_IsDeviceConnected(I2C2, LIGHT_SYS_ADDRESS)==TM_I2C_Result_Ok){
+        TM_I2C_ReadNoRegister(I2C2, LIGHT_SYS_ADDRESS, &lightSys);
       return lightSys;
     }
 
@@ -147,7 +153,35 @@ void SHG_runner(void const * argument)
     }
     void SHG_setTresholdHumidity(int Humidity){
       hum_thrs=Humidity;
+      return;
     }
     void SHG_setTresholdLight(int Light){
       light_thrs=Light;
+      return;
+    }
+
+    void SHG_heatingSystemOn(){
+      if(TM_I2C_IsDeviceConnected(I2C2, HEATING_ADDRESS)==TM_I2C_Result_Ok)
+         TM_I2C_WriteNoRegister(I2C2, HEATING_ADDRESS,0x01);
+    }
+    void SHG_waterSystemOn(){
+      if(TM_I2C_IsDeviceConnected(I2C2, WATER_SYS_ADDRESS)==TM_I2C_Result_Ok)
+         TM_I2C_WriteNoRegister(I2C2, WATER_SYS_ADDRESS,0x01);
+    }
+    void SHG_lightSystemOn(){
+      if(TM_I2C_IsDeviceConnected(I2C2, LIGHT_SYS_ADDRESS)==TM_I2C_Result_Ok)
+         TM_I2C_WriteNoRegister(I2C2, LIGHT_SYS_ADDRESS,0x01);
+    }
+    
+    void SHG_heatingSystemOff(){
+      if(TM_I2C_IsDeviceConnected(I2C2, HEATING_ADDRESS)==TM_I2C_Result_Ok)
+         TM_I2C_WriteNoRegister(I2C2, HEATING_ADDRESS,0x00);
+    }
+    void SHG_waterSystemOff(){
+      if(TM_I2C_IsDeviceConnected(I2C2, WATER_SYS_ADDRESS)==TM_I2C_Result_Ok)
+         TM_I2C_WriteNoRegister(I2C2, WATER_SYS_ADDRESS,0x00);
+    }
+    void SHG_lightSystemOff(){
+      if(TM_I2C_IsDeviceConnected(I2C2, LIGHT_SYS_ADDRESS)==TM_I2C_Result_Ok)
+         TM_I2C_WriteNoRegister(I2C2, LIGHT_SYS_ADDRESS,0x00);
     }
