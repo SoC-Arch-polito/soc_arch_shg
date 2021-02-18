@@ -70,9 +70,9 @@ void SHG_runner(void const * argument)
 
 
     void SHG_stop(){
-      lightSys=OFF;
-      waterSys=OFF;
-      heatingSys=OFF;
+      SHG_waterSystemOff();
+      SHG_heatingSystemOff();
+      SHG_lightSystemOff();
       powered=OFF;
     }
 
@@ -80,10 +80,6 @@ void SHG_runner(void const * argument)
       hum_thrs=DEFAULT_HUM;
       temp_thrs=DEFAULT_TEMP;
       light_thrs=DEFAULT_LIGHT;
-      lightSys=OFF;
-      waterSys=OFF;
-      heatingSys=OFF;
-      powered=OFF;
     }
 
     void SHG_connect(){
