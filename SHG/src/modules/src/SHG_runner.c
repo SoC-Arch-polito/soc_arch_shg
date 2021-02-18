@@ -46,7 +46,7 @@ void SHG_runner(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-    if(powered=ON){
+    if(powered){
      if(SHG_getTemperature()<temp_thrs)
        SHG_heatingSystemOn();
       else
@@ -95,38 +95,40 @@ void SHG_runner(void const * argument)
     }
 
     bool SHG_getHeatingSystemStatus(){
-      if(TM_I2C_IsDeviceConnected(I2C2, HEATING_ADDRESS)==TM_I2C_Result_Ok){
-        TM_I2C_ReadNoRegister(I2C2, HEATING_ADDRESS, &heatingSys);
-      return heatingSys;
+      uint8_t value=0;
+      if(TM_I2C_IsDeviceConnected(I2C2, HEATING_ADDRESS)==TM_I2C_Result_Ok)
+        TM_I2C_ReadNoRegister(I2C2, HEATING_ADDRESS, &value);
+      return value;
     }
     bool SHG_getWaterSystemStatus(){
-      if(TM_I2C_IsDeviceConnected(I2C2, WATER_SYS_ADDRESS)==TM_I2C_Result_Ok){
-        TM_I2C_ReadNoRegister(I2C2, WATER_SYS_ADDRESS, &waterSys);
-      return waterSys;
+      uint8_t value=0;
+      if(TM_I2C_IsDeviceConnected(I2C2, WATER_SYS_ADDRESS)==TM_I2C_Result_Ok)
+        TM_I2C_ReadNoRegister(I2C2, WATER_SYS_ADDRESS, &value);
+      return value;
     }
     bool SHG_getLightSystemStatus(){
-      if(TM_I2C_IsDeviceConnected(I2C2, LIGHT_SYS_ADDRESS)==TM_I2C_Result_Ok){
-        TM_I2C_ReadNoRegister(I2C2, LIGHT_SYS_ADDRESS, &lightSys);
-      return lightSys;
+      uint8_t value=0;
+      if(TM_I2C_IsDeviceConnected(I2C2, LIGHT_SYS_ADDRESS)==TM_I2C_Result_Ok)
+        TM_I2C_ReadNoRegister(I2C2, LIGHT_SYS_ADDRESS, &value);
+      return value;
     }
 
     int SHG_getTemperature(){
       uint8_t value=0;
-      if(TM_I2C_IsDeviceConnected(I2C1, TEMP_SENSOR_ADDRESS)==TM_I2C_Result_Ok){
+      if(TM_I2C_IsDeviceConnected(I2C1, TEMP_SENSOR_ADDRESS)==TM_I2C_Result_Ok)
         TM_I2C_ReadNoRegister(I2C1, TEMP_SENSOR_ADDRESS, &value);
       return value;
 
-      }
     }
     int SHG_getLight(){
       uint8_t value=0;
-      if(TM_I2C_IsDeviceConnected(I2C1, LIGHT_SENSOR_ADDRESS)==TM_I2C_Result_Ok){
+      if(TM_I2C_IsDeviceConnected(I2C1, LIGHT_SENSOR_ADDRESS)==TM_I2C_Result_Ok)
         TM_I2C_ReadNoRegister(I2C1, LIGHT_SENSOR_ADDRESS, &value);
       return value;
     }
     int SHG_getHumidity(){
       uint8_t value=0;
-      if(TM_I2C_IsDeviceConnected(I2C1, HUM_SENSOR_ADDRESS)==TM_I2C_Result_Ok){
+      if(TM_I2C_IsDeviceConnected(I2C1, HUM_SENSOR_ADDRESS)==TM_I2C_Result_Ok)
         TM_I2C_ReadNoRegister(I2C1, HUM_SENSOR_ADDRESS, &value);
       return value;
     }
