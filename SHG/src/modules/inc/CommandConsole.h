@@ -1,7 +1,7 @@
 #ifndef _COMMAND_CONSOLLE_H
 #define _COMMAND_CONSOLLE_H
 #define WELCOME_STRING "******Welcome! This is the Smart Hydroponic Greenhouse!******\n\r"
-#define PRESENTATION_STRING "This is the Command Console of the SHG, write 'help' to have the list of available commands.\n\r"
+#define PRESENTATION_STRING "This is the Command Console of the SHG, take care of your plants and enjoy!.\n\r"
 #define UNKNOWNCOMMAND "Command not recognized, please write an available command, to have the list use the command 'help'.\n\r"
 #define COMMANDLENGTH 12
 

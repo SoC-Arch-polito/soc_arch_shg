@@ -59,14 +59,15 @@ if(TM_I2C_IsDeviceConnected(I2C1, BLUETOOTH_RX_ADDRESS)==TM_I2C_Result_Ok){
         }
 
       cmd = ParseCommand(comm);
-      if(cmd == status)
+      if(cmd == status){}
         //bla bla
       if(!repeated && (cmd != status)){
        switch (cmd){
          case wait_pair:
-          if(!paired)
+          if(!paired){
             //pairing...ADD TO USART1
             TM_USART_Puts(USART2,"The Device is pairing with the user...\n");
+          }
            break;
          case pair:
           if(!paired){
@@ -130,5 +131,5 @@ enum command ParseCommand(uint8_t cmd) {
       SHG_cmd = stop;
     }
     return SHG_cmd;
-  }
+}
 
