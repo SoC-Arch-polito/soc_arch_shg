@@ -8,10 +8,8 @@
 /*****************COMMANDS TODO*****************/
 /*
 - start         -> to start the SHG (read from sensors and write to actuators);
-- log           -> to output info messages about the recent history of the machine;
 - status        -> to outupt the values of the environmental variables;
 - clear         -> clear the UART command line;
-- help          -> to show the available commands;
 - stop          -> pause the SHG;
 - setThs        -> force the three thresholds to a user defined thresholds;
 - getThs        -> print the three thresholds to the user;
@@ -20,7 +18,7 @@
 /***********************************************/
 // Shared Variable used to set the command.
 enum command {
-  idle, start, log, status, clear, help, stop, setThs, getThs, reset, error
+  wait_pair, pair, start, status, clear, stop, setThs, getThs, reset, error
 }; 
 
     void CommandConsole(void const * argument);
