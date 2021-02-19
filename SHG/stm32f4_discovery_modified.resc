@@ -30,10 +30,16 @@ alias Humidity "i2c1.TempHumSensor Temperature"
 alias Light "i2c1.LightSensor Light"
 alias Heating "i2c2.HeatingS Active" 
 alias Command "i2c1.BluetoothRx Command"
-
-
-
-
+alias Pair 1
+alias Start 2
+alias Status 3
+alias Stop 4
+alias SetThs 5
+alias GetThs 6
+alias Reset 7
+alias Ok1 110
+alias Ok2 120
+alias Ok3 130
 
 cpu PerformanceInMips 125
 
