@@ -14,7 +14,6 @@
 /*
 - start         -> to start the SHG (read from sensors and write to actuators);
 - status        -> to outupt the values of the environmental variables;
-- clear         -> clear the UART command line;
 - stop          -> pause the SHG;
 - setThs        -> force the three thresholds to a user defined thresholds;
 - getThs        -> print the three thresholds to the user;

@@ -92,6 +92,7 @@ if(TM_I2C_IsDeviceConnected(I2C1, BLUETOOTH_RX_ADDRESS)==TM_I2C_Result_Ok){
       if(cmd == pair && !paired && !repeated){
           TM_USART_Puts(USART2,"The Device is paired!\n");
           paired = 1;
+          SHS_connect();
       }
 
       //handle wait_pair command
