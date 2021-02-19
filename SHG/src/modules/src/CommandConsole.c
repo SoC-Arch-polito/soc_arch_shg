@@ -67,6 +67,7 @@ if(TM_I2C_IsDeviceConnected(I2C1, BLUETOOTH_RX_ADDRESS)==TM_I2C_Result_Ok){
       cmd = ParseCommand(comm);
       //handle status command
       if(cmd == status){
+        TM_USART_Puts(USART2,STATUSSTRING);
         Temperature = SHG_getTemperature();
         Light = SHG_getLight();
         Humidity = SHG_getHumidity();
@@ -84,7 +85,7 @@ if(TM_I2C_IsDeviceConnected(I2C1, BLUETOOTH_RX_ADDRESS)==TM_I2C_Result_Ok){
         strcat(buffer,itoa(Light,buf,10));
         strcat(buffer,"\n");
         TM_USART_Puts(USART2,buffer);
-
+        TM_USART_Puts(USART2,LINEBREAK);
         memset(buffer,0,256);
       }
 

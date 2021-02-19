@@ -8,6 +8,8 @@
 #define HUMSTRINGTHS "Please, insert a threshold for the humidity (from 0 to 100), and then confirm (Ok2):\n\r"
 #define LIGHTSTRINGTHS "Please, insert a threshold for the light (from 0 to 100), and then confirm (Ok3):\n\r"
 #define CONFIRMSTRING "Values accepted!\n\r"
+#define STATUSSTRING "----The current status of the SHG----\n\r"
+#define LINEBREAK "-------------------------------------\n\n\r"
 #define COMMANDLENGTH 12
 
 /*****************COMMANDS TODO*****************/
