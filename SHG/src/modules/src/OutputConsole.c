@@ -39,17 +39,17 @@ void OutputConsole(void const * argument)
 {
   /* USER CODE BEGIN OutputConsole */
   /* Infinite loop */
-
     bool SHG_HsStatus,SHG_WsStatus,SHG_LsStatus ;
     int SHG_Temp,SHG_Light,SHG_Hum;
     bool SHG_PairStatus,SHG_On;
     int SHG_ThresholdTemp,SHG_ThresholdHum,SHG_ThresholdLight;
 
-    int start_time = HAL_GetTick();
+    int start_time = xTaskGetTickCount();
 
     char buffer[BUFF_SIZE] = "";
     char env_buffer[10] = "";
-    char time_buffer[20] = "";
+    int now; 
+    static int tm[4];
 
 
     int seconds,minutes,hours,days,elapsed;
@@ -69,8 +69,7 @@ void OutputConsole(void const * argument)
     SHG_ThresholdHum = SHG_getTresholdHumidity();
     SHG_ThresholdLight = SHG_getTresholdLight();
 
-    int now = HAL_GetTick();
-    static int tm[4];
+    now = xTaskGetTickCount();
 
     TM_USART_Puts(USART1,"\e[2J\e[;H");
 
@@ -85,15 +84,17 @@ void OutputConsole(void const * argument)
     minutes = minutes % 60;
     hours = hours % 24;
 
+    
     strcat(buffer,"[SHG:TIME] D: ");
-    strcat(buffer,itoa(days,time_buffer,10));
+    strcat(buffer,itoa(days,env_buffer,10));
     strcat(buffer," H: ");
-    strcat(buffer,itoa(hours,time_buffer,10));
+    strcat(buffer,itoa(hours,env_buffer,10));
     strcat(buffer," M: ");
-    strcat(buffer,itoa(minutes,time_buffer,10));
+    strcat(buffer,itoa(minutes,env_buffer,10));
     strcat(buffer," S: ");
-    strcat(buffer,itoa(seconds,time_buffer,10));
+    strcat(buffer,itoa(seconds,env_buffer,10));
     strcat(buffer,"\n");
+    
 
     strcat(buffer,"[SHG:BLUETOOTH]Pairing status:");
     strcat(buffer, BOOL2STRING(SHG_PairStatus)); 
@@ -115,7 +116,7 @@ void OutputConsole(void const * argument)
      TM_USART_Puts(USART1,buffer);
      memset(buffer, 0,BUFF_SIZE);
      memset(env_buffer,0,10);
-     memset(time_buffer,0,20);
+
 
     strcat(buffer,"[SHG:THRESHOLDS] Humidity threshold :");
     strcat(buffer, itoa(SHG_ThresholdHum,env_buffer,10)); 
@@ -141,7 +142,7 @@ void OutputConsole(void const * argument)
      TM_USART_Puts(USART1,buffer);
      memset(buffer, 0,BUFF_SIZE);
      memset(env_buffer,0,10);
-     memset(time_buffer,0,20);
+
      osDelay(SHG_OUTPUTCONSOLE_DELAY);
     //HAL_Delay(SHG_OUTPUTCONSOLE_DELAY);
   }
