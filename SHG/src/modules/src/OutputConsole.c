@@ -12,8 +12,10 @@
 #include <tm_stm32_i2c.h>
 #include <string.h>
 #include <stdio.h>
+#include <time.h>
 
-#define BOOL2STRING(v)   ( ( v== true) ? "true" : "false" )
+#define BOOL2STRING(v)   ( ( v) ? "true" : "false" )
+#define BUFF_SIZE 300
 
 /* USER CODE BEGIN Header_OutputConsole */
 /**
@@ -24,7 +26,11 @@
 /* USER CODE END Header_OutputConsole */
 
 
-#define SHG_OUTPUTCONSOLE_DELAY 2000
+#define SHG_OUTPUTCONSOLE_DELAY 8000
+
+int avgTemp[24]=      {0};
+int avgHumidity[24] = {0};
+int avgLight[24] =    {0};
 
 
 
@@ -38,9 +44,16 @@ void OutputConsole(void const * argument)
     int SHG_Temp,SHG_Light,SHG_Hum;
     bool SHG_PairStatus,SHG_On;
     int SHG_ThresholdTemp,SHG_ThresholdHum,SHG_ThresholdLight;
-  
-    char buffer[256] = "";
+
+    int start_time = HAL_GetTick();
+
+    char buffer[BUFF_SIZE] = "";
     char env_buffer[10] = "";
+    char time_buffer[20] = "";
+
+
+    int seconds,minutes,hours,days,elapsed;
+ 
 
   while(1){
 
@@ -56,7 +69,33 @@ void OutputConsole(void const * argument)
     SHG_ThresholdHum = SHG_getTresholdHumidity();
     SHG_ThresholdLight = SHG_getTresholdLight();
 
-    strcat(buffer,"[SHG:BLUETOOTH]\tPairing status:");
+    int now = HAL_GetTick();
+    static int tm[4];
+
+    TM_USART_Puts(USART1,"\e[2J\e[;H");
+
+    elapsed = now - start_time; 
+
+    seconds = elapsed / 1000;
+    minutes = seconds / 60;
+    hours = minutes / 60;
+    days = hours / 24;
+
+    seconds = seconds % 60;
+    minutes = minutes % 60;
+    hours = hours % 24;
+
+    strcat(buffer,"[SHG:TIME] D: ");
+    strcat(buffer,itoa(days,time_buffer,10));
+    strcat(buffer," H: ");
+    strcat(buffer,itoa(hours,time_buffer,10));
+    strcat(buffer," M: ");
+    strcat(buffer,itoa(minutes,time_buffer,10));
+    strcat(buffer," S: ");
+    strcat(buffer,itoa(seconds,time_buffer,10));
+    strcat(buffer,"\n");
+
+    strcat(buffer,"[SHG:BLUETOOTH]Pairing status:");
     strcat(buffer, BOOL2STRING(SHG_PairStatus)); 
     strcat(buffer,"\n");
 
@@ -72,6 +111,11 @@ void OutputConsole(void const * argument)
     strcat(buffer,"LS status :");
     strcat(buffer, BOOL2STRING(SHG_LsStatus)); 
     strcat(buffer,"\n");
+
+     TM_USART_Puts(USART1,buffer);
+     memset(buffer, 0,BUFF_SIZE);
+     memset(env_buffer,0,10);
+     memset(time_buffer,0,20);
 
     strcat(buffer,"[SHG:THRESHOLDS] Humidity threshold :");
     strcat(buffer, itoa(SHG_ThresholdHum,env_buffer,10)); 
@@ -95,13 +139,13 @@ void OutputConsole(void const * argument)
 
 
      TM_USART_Puts(USART1,buffer);
-     memset(buffer, 0,256);
+     memset(buffer, 0,BUFF_SIZE);
+     memset(env_buffer,0,10);
+     memset(time_buffer,0,20);
      osDelay(SHG_OUTPUTCONSOLE_DELAY);
     //HAL_Delay(SHG_OUTPUTCONSOLE_DELAY);
   }
   /* USER CODE END OutputConsole */
 
 }
-
-
 
