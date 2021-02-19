@@ -71,16 +71,20 @@ if(TM_I2C_IsDeviceConnected(I2C1, BLUETOOTH_RX_ADDRESS)==TM_I2C_Result_Ok){
         Temperature = SHG_getTemperature();
         Light = SHG_getLight();
         Humidity = SHG_getHumidity();
+        strcat(buffer, "The heating system is -> ");
+        strcat(buffer, (SHG_getHeatingSystemStatus() ? "ON  \n" : "OFF \n"));
         strcat(buffer,"The current temperature is: ");
         strcat(buffer,itoa(Temperature,buf,10));
         strcat(buffer,"\n");
-        TM_USART_Puts(USART2,buffer);
 
+        strcat(buffer, "The water system is -> ");
+        strcat(buffer, (SHG_getWaterSystemStatus() ? "ON  \n" : "OFF \n"));
         strcat(buffer,"The current humidity is: ");
         strcat(buffer,itoa(Humidity,buf,10));
         strcat(buffer,"\n");
-        TM_USART_Puts(USART2,buffer);
 
+        strcat(buffer, "The light system is -> ");
+        strcat(buffer, (SHG_getLightSystemStatus() ? "ON  \n" : "OFF \n"));
         strcat(buffer,"The current light is: ");
         strcat(buffer,itoa(Light,buf,10));
         strcat(buffer,"\n");
