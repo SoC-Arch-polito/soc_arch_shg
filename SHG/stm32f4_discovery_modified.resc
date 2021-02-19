@@ -25,21 +25,21 @@ emulation CreateServerSocketTerminal 1234 "externalUART"
 connector Connect uart2 externalUART
 showAnalyzer uart1
 showAnalyzer uart2
-alias Temperature "i2c1.TempHumSensor Temperature"
-alias Humidity "i2c1.TempHumSensor Temperature"
+alias Temperature "i2c1.TemperatureSensor Temperature"
+alias Humidity "i2c1.HumidityeSensor Humidity"
 alias Light "i2c1.LightSensor Light"
 alias Heating "i2c2.HeatingS Active" 
 alias Command "i2c1.BluetoothRx Command"
-alias Pair 1
-alias Start 2
-alias Status 3
-alias Stop 4
-alias SetThs 5
-alias GetThs 6
-alias Reset 7
-alias Ok1 110
-alias Ok2 120
-alias Ok3 130
+alias Pair  "i2c1.BluetoothRx Command 1"
+alias Start "i2c1.BluetoothRx Command 2"
+alias Status "i2c1.BluetoothRx Command 3"
+alias Stop "i2c1.BluetoothRx Command 4"
+alias SetThs "i2c1.BluetoothRx Command 5"
+alias GetThs "i2c1.BluetoothRx Command 6"
+alias Reset "i2c1.BluetoothRx Command 7"
+alias Ok1 "i2c1.BluetoothRx Command 110"
+alias Ok2 "i2c1.BluetoothRx Command 120"
+alias Ok3 "i2c1.BluetoothRx Command 130"
 
 cpu PerformanceInMips 125
 
@@ -52,3 +52,5 @@ macro reset
 """
 
 runMacro $reset
+
+machine StartGdbServer 3333 True

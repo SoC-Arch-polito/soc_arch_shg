@@ -56,7 +56,7 @@ void SHG_runner(void const * argument)
       else
         SHG_lightSystemOff();
     }
-    osDelay(1);
+    osDelay(500);
   }
   /* USER CODE END SHG_runner */
 }
@@ -90,19 +90,28 @@ void SHG_runner(void const * argument)
       uint8_t value=0;
       if(TM_I2C_IsDeviceConnected(I2C2, HEATING_ADDRESS)==TM_I2C_Result_Ok)
         TM_I2C_ReadNoRegister(I2C2, HEATING_ADDRESS, &value);
-      return value;
+      if (value==0x00)
+        return 0;
+      else
+        return 1;
     }
     bool SHG_getWaterSystemStatus(){
       uint8_t value=0;
       if(TM_I2C_IsDeviceConnected(I2C2, WATER_SYS_ADDRESS)==TM_I2C_Result_Ok)
         TM_I2C_ReadNoRegister(I2C2, WATER_SYS_ADDRESS, &value);
-      return value;
+      if (value==0x00)
+        return 0;
+      else
+        return 1;
     }
     bool SHG_getLightSystemStatus(){
       uint8_t value=0;
       if(TM_I2C_IsDeviceConnected(I2C2, LIGHT_SYS_ADDRESS)==TM_I2C_Result_Ok)
         TM_I2C_ReadNoRegister(I2C2, LIGHT_SYS_ADDRESS, &value);
-      return value;
+      if (value==0x00)
+        return 0;
+      else
+        return 1;
     }
 
     int SHG_getTemperature(){

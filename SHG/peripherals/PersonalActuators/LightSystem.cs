@@ -11,6 +11,7 @@ using Antmicro.Renode.Exceptions;
 using Antmicro.Renode.Logging;
 using Antmicro.Renode.UserInterface;
 
+
 namespace Antmicro.Renode.Peripherals.Actuator
 {
     public class LightSystem : II2CPeripheral, ILightSystem,IExternal
@@ -23,6 +24,13 @@ namespace Antmicro.Renode.Peripherals.Actuator
 
         public byte[] Read(int count = 1)
         {
+            byte temp;
+            outputBuffer.Clear();
+            if(active)
+                temp=0x01;
+            else
+                temp=0x00;
+            outputBuffer.Enqueue(temp);
             var result = outputBuffer.ToArray();
             this.Log(LogLevel.Noisy, "Reading {0} bytes from the device (asked for {1} bytes).", result.Length, count);
             outputBuffer.Clear();

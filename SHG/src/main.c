@@ -89,9 +89,11 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_I2C1_Init();
+  //MX_I2C1_Init();
   //MX_I2C2_Init();
   TM_I2C_Init(I2C1, TM_I2C_PinsPack_1, TM_I2C_CLOCK_STANDARD);
+  TM_I2C_Init(I2C2, TM_I2C_PinsPack_2, TM_I2C_CLOCK_STANDARD);
+  
   MX_USART1_UART_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
