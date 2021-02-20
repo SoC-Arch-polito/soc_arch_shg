@@ -1,7 +1,8 @@
 #ifndef _COMMAND_CONSOLLE_H
 #define _COMMAND_CONSOLLE_H
 #define WELCOME_STRING "******Welcome! This is the Smart Hydroponic Greenhouse!******\n\r"
-#define PRESENTATION_STRING "This is the Command Console of the SHG, take care of your plants and enjoy!.\n\r"
+#define PRESENTATION_STRING "This is the Command Console of the SHG, take care of your plants and enjoy!\n\r"
+#define COMMANDLIST "- Start  -> to start the SHG \n- Status -> to see time by time the SHG status \n- Stop   -> to stop the SHG \n- SetThs -> to set the thresholds \n- GetThs -> to have the thresholds values \n- Reset  -> to reset the to the standard thresholds of the SHG \n\n\n\r"
 #define UNKNOWNCOMMAND "Command not recognized, please write an available command.\n\r"
 #define RESETMACHINE "The machine is on reset, the default values of the thresholds are set.\n\r"
 #define TEMPSTRINGTHS "Please, insert a threshold for the temperature (from 0 to 100), and then confirm (Ok1):\n\r"
