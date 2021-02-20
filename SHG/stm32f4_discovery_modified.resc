@@ -41,6 +41,10 @@ alias Ok1 "i2c1.BluetoothRx Command 110"
 alias Ok2 "i2c1.BluetoothRx Command 120"
 alias Ok3 "i2c1.BluetoothRx Command 130"
 
+Temperature 22
+Humidity 60
+Light 30
+
 cpu PerformanceInMips 125
 
 $bin?=@./.pio/build/disco_f407vg/firmware.elf
