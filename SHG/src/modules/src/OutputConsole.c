@@ -26,7 +26,7 @@
 /* USER CODE END Header_OutputConsole */
 
 
-#define SHG_OUTPUTCONSOLE_DELAY 8000
+#define SHG_OUTPUTCONSOLE_DELAY 1200
 
 int avgTemp[24]=      {0};
 int avgHumidity[24] = {0};
@@ -44,7 +44,7 @@ void OutputConsole(void const * argument)
     bool SHG_PairStatus,SHG_On;
     int SHG_ThresholdTemp,SHG_ThresholdHum,SHG_ThresholdLight;
 
-    int start_time = xTaskGetTickCount();
+    int start_time = HAL_GetTick();
 
     char buffer[BUFF_SIZE] = "";
     char env_buffer[10] = "";
@@ -69,13 +69,13 @@ void OutputConsole(void const * argument)
     SHG_ThresholdHum = SHG_getTresholdHumidity();
     SHG_ThresholdLight = SHG_getTresholdLight();
 
-    now = xTaskGetTickCount();
+    now = HAL_GetTick();
 
     TM_USART_Puts(USART1,"\e[2J\e[;H");
 
     elapsed = now - start_time; 
 
-    seconds = elapsed / 1000;
+    seconds = elapsed / 1200;
     minutes = seconds / 60;
     hours = minutes / 60;
     days = hours / 24;

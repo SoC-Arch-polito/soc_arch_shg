@@ -56,7 +56,7 @@ void SHG_runner(void const * argument)
       else
         SHG_lightSystemOff();
     }
-    osDelay(500);
+    osDelay(10);
   }
   /* USER CODE END SHG_runner */
 }
