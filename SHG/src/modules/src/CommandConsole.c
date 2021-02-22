@@ -214,7 +214,7 @@ if(TM_I2C_IsDeviceConnected(I2C1, BLUETOOTH_RX_ADDRESS)==TM_I2C_Result_Ok){
            break;
         }
       }
-     osDelay(2000);
+     osDelay(1000);
      prev_comm = comm;
    }
 //   /* USER CODE END CommandConsole */
