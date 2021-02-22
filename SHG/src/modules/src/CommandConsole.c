@@ -66,7 +66,11 @@ if(TM_I2C_IsDeviceConnected(I2C1, BLUETOOTH_RX_ADDRESS)==TM_I2C_Result_Ok){
 
       cmd = ParseCommand(comm);
       //handle status command
-      if(cmd == status){
+      if(cmd == status && already_started == 1 && paired == 1){
+        TM_USART_Puts(USART2,"\e[2J\e[;H");
+        TM_USART_Puts(USART2,WELCOME_STRING);
+        TM_USART_Puts(USART2,PRESENTATION_STRING);
+        TM_USART_Puts(USART2,COMMANDLIST);
         TM_USART_Puts(USART2,STATUSSTRING);
         Temperature = SHG_getTemperature();
         Light = SHG_getLight();
@@ -111,16 +115,27 @@ if(TM_I2C_IsDeviceConnected(I2C1, BLUETOOTH_RX_ADDRESS)==TM_I2C_Result_Ok){
          case start:
           if(!already_started){
            SHG_start();
+           TM_USART_Puts(USART2,"\e[2J\e[;H");
            TM_USART_Puts(USART2,WELCOME_STRING);
            TM_USART_Puts(USART2,PRESENTATION_STRING);
+           TM_USART_Puts(USART2,COMMANDLIST);
           }
           already_started = 1;
            break;
          case stop:
+           TM_USART_Puts(USART2,"\e[2J\e[;H");
+           TM_USART_Puts(USART2,WELCOME_STRING);
+           TM_USART_Puts(USART2,PRESENTATION_STRING);
+           TM_USART_Puts(USART2,COMMANDLIST);
+           TM_USART_Puts(USART2,"The SHG is stopped!\n\r");
            already_started = 0;
            SHG_stop();
            break;
          case setThs:
+           TM_USART_Puts(USART2,"\e[2J\e[;H");
+           TM_USART_Puts(USART2,WELCOME_STRING);
+           TM_USART_Puts(USART2,PRESENTATION_STRING);
+           TM_USART_Puts(USART2,COMMANDLIST);
          //l'utente deve mandare th1 e 'ok1' (110), th2 e 'ok2' (120), th3 e 'ok3' (130)
            TM_USART_Puts(USART2,TEMPSTRINGTHS);
            while(1){
@@ -155,6 +170,10 @@ if(TM_I2C_IsDeviceConnected(I2C1, BLUETOOTH_RX_ADDRESS)==TM_I2C_Result_Ok){
            TM_USART_Puts(USART2,CONFIRMSTRING);
            break;
          case getThs:
+          TM_USART_Puts(USART2,"\e[2J\e[;H");
+          TM_USART_Puts(USART2,WELCOME_STRING);
+          TM_USART_Puts(USART2,PRESENTATION_STRING);
+          TM_USART_Puts(USART2,COMMANDLIST);
           Temperature = SHG_getTresholdTemperature();
           Light = SHG_getTresholdLight();
           Humidity = SHG_getTresholdHumidity();
@@ -177,12 +196,20 @@ if(TM_I2C_IsDeviceConnected(I2C1, BLUETOOTH_RX_ADDRESS)==TM_I2C_Result_Ok){
           memset(buffer,0,256);
            break;
          case reset:
+           TM_USART_Puts(USART2,"\e[2J\e[;H");
+           TM_USART_Puts(USART2,WELCOME_STRING);
+           TM_USART_Puts(USART2,PRESENTATION_STRING);
+           TM_USART_Puts(USART2,COMMANDLIST);
            TM_USART_Puts(USART2,RESETMACHINE);
            SHG_rst();
            break;
          case endThs: 
           break;
          default:
+           TM_USART_Puts(USART2,"\e[2J\e[;H");
+           TM_USART_Puts(USART2,WELCOME_STRING);
+           TM_USART_Puts(USART2,PRESENTATION_STRING);
+           TM_USART_Puts(USART2,COMMANDLIST);
            TM_USART_Puts(USART2,UNKNOWNCOMMAND);
            break;
         }
