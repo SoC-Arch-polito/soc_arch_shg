@@ -114,11 +114,11 @@ void MX_FREERTOS_Init(void) {
   defaultTaskHandle = osThreadCreate(osThread(defaultTask), NULL);
 
   /* definition and creation of UartRX */
-  osThreadDef(UartRX, CommandConsole, osPriorityNormal, 0, 128);
+  osThreadDef(UartRX, CommandConsole, osPriorityHigh, 0, 128);
   UartRXHandle = osThreadCreate(osThread(UartRX), NULL);
 
   /* definition and creation of UartTX */
-  osThreadDef(UartTX, OutputConsole, osPriorityNormal, 0, 128);
+  osThreadDef(UartTX, OutputConsole, osPriorityHigh, 0, 128);
   UartTXHandle = osThreadCreate(osThread(UartTX), NULL);
 
   /* definition and creation of SHG_core */
