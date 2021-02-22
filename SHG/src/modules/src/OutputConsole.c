@@ -85,31 +85,33 @@ void OutputConsole(void const * argument)
     hours = hours % 24;
 
     
-    strcat(buffer,"[SHG:TIME] D: ");
+    strcat(buffer,"[SHG:TIME]      \t");
     strcat(buffer,itoa(days,env_buffer,10));
-    strcat(buffer," H: ");
+    strcat(buffer,"d");
     strcat(buffer,itoa(hours,env_buffer,10));
-    strcat(buffer," M: ");
+    strcat(buffer,"h");
     strcat(buffer,itoa(minutes,env_buffer,10));
-    strcat(buffer," S: ");
+    strcat(buffer,"m");
     strcat(buffer,itoa(seconds,env_buffer,10));
-    strcat(buffer,"\n");
+    strcat(buffer,"s\n");
     
 
-    strcat(buffer,"[SHG:BLUETOOTH]Pairing status:");
+    strcat(buffer,"[SHG:CONNECTION]\tPairing status: ");
     strcat(buffer, BOOL2STRING(SHG_PairStatus)); 
     strcat(buffer,"\n");
 
-    strcat(buffer,"[SHG:STATUS] Power on :");
+    strcat(buffer,"[SHG:STATUS]     Active: ");
     strcat(buffer, BOOL2STRING(SHG_On)); 
-    strcat(buffer," , ");
-    strcat(buffer,"HS status :");
+    strcat(buffer,"\n");
+
+
+    strcat(buffer,"[SHG:ACTUATORS]  HS status: ");
     strcat(buffer, BOOL2STRING(SHG_HsStatus)); 
-    strcat(buffer," , ");
-    strcat(buffer,"WS status :");
+    strcat(buffer,"\t\t\t\t\t\t\t\t");
+    strcat(buffer,"WS status: ");
     strcat(buffer, BOOL2STRING(SHG_WsStatus)); 
-    strcat(buffer," , ");
-    strcat(buffer,"LS status :");
+    strcat(buffer,"\t\t\t\t\t\t\t\t\t\t\t\t");
+    strcat(buffer,"LS status: ");
     strcat(buffer, BOOL2STRING(SHG_LsStatus)); 
     strcat(buffer,"\n");
 
@@ -118,23 +120,23 @@ void OutputConsole(void const * argument)
      memset(env_buffer,0,10);
 
 
-    strcat(buffer,"[SHG:THRESHOLDS] Humidity threshold :");
+    strcat(buffer,"[SHG:THRESHOLDS] Humidity threshold: ");
     strcat(buffer, itoa(SHG_ThresholdHum,env_buffer,10)); 
-    strcat(buffer," , ");
-    strcat(buffer,"Temperature threshold :");
+    strcat(buffer,"\t\t\t");
+    strcat(buffer,"Temperature threshold: ");
     strcat(buffer,itoa(SHG_ThresholdTemp,env_buffer,10) ); 
-    strcat(buffer," , ");
-    strcat(buffer,"Light threshold :");
+    strcat(buffer,"\t\t\t ");
+    strcat(buffer,"Light threshold: ");
     strcat(buffer,itoa(SHG_ThresholdLight,env_buffer,10)); 
     strcat(buffer,"\n");
 
-    strcat(buffer,"[SHG:ENVIROMENT] Humidy :");
+    strcat(buffer,"[SHG:SENSORS]    Humidy: ");
     strcat(buffer, itoa(SHG_Hum,env_buffer,10)); 
-    strcat(buffer," , ");
-    strcat(buffer,"Temperature :");
+    strcat(buffer,"\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+    strcat(buffer,"Temperature: ");
     strcat(buffer,itoa(SHG_Temp,env_buffer,10) ); 
-    strcat(buffer," , ");
-    strcat(buffer,"Light :");
+    strcat(buffer,"\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+    strcat(buffer,"Light: ");
     strcat(buffer,itoa(SHG_Light,env_buffer,10)); 
     strcat(buffer,"\n");
 
