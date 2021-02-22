@@ -26,7 +26,7 @@
 /* USER CODE END Header_OutputConsole */
 
 
-#define SHG_OUTPUTCONSOLE_DELAY 1200
+#define SHG_OUTPUTCONSOLE_DELAY 2000
 
 int avgTemp[24]=      {0};
 int avgHumidity[24] = {0};
