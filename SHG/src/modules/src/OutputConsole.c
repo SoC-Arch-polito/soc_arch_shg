@@ -130,7 +130,7 @@ void OutputConsole(void const * argument)
     strcat(buffer,itoa(SHG_ThresholdLight,env_buffer,10)); 
     strcat(buffer,"\%\n");
 
-    strcat(buffer,"[SHG:SENSORS]    Humidy: ");
+    strcat(buffer,"[SHG:SENSORS]    Humidity: ");
     strcat(buffer, itoa(SHG_Hum,env_buffer,10)); 
     strcat(buffer,"\%\t\t\t\t\t\t\t\t\t\t\t\t");
     strcat(buffer,"Temperature: ");
