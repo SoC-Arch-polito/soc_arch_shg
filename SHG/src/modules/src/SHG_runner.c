@@ -28,9 +28,9 @@ static bool paired=NOT_OK;
 static bool HS=OFF;
 static bool WS=OFF;
 static bool LS=OFF;
-static int hum_thrs=0;
-static int temp_thrs=0;
-static int light_thrs=0;
+static int hum_thrs=DEFAULT_HUM;
+static int temp_thrs=DEFAULT_TEMP;
+static int light_thrs=DEFAULT_LIGHT;
 static int temp=0;
 static int hum=0;
 static int lig=0;
@@ -81,6 +81,13 @@ void SHG_runner(void const * argument)
         SHG_lightSystemOff();
         LS=OFF;
       }
+    }else{
+      HS=OFF;
+      WS=OFF;
+      LS=OFF;
+      SHG_waterSystemOff();
+      SHG_heatingSystemOff();
+      SHG_lightSystemOff();
     }
     osDelay(10);
   }
@@ -107,17 +114,11 @@ void SHG_runner(void const * argument)
     }
 
     void SHG_start(){  
-      hum_thrs=DEFAULT_HUM;
-      temp_thrs=DEFAULT_TEMP;
-      light_thrs=DEFAULT_LIGHT;
       powered=ON;
     }
 
 
     void SHG_stop(){
-      SHG_waterSystemOff();
-      SHG_heatingSystemOff();
-      SHG_lightSystemOff();
       powered=OFF;
     }
 
