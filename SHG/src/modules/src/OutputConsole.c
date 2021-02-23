@@ -132,13 +132,13 @@ void OutputConsole(void const * argument)
 
     strcat(buffer,"[SHG:SENSORS]    Humidy: ");
     strcat(buffer, itoa(SHG_Hum,env_buffer,10)); 
-    strcat(buffer,"\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+    strcat(buffer,"\%\t\t\t\t\t\t\t\t\t\t\t\t");
     strcat(buffer,"Temperature: ");
     strcat(buffer,itoa(SHG_Temp,env_buffer,10) ); 
-    strcat(buffer,"\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
+    strcat(buffer,"°C\t\t\t\t\t\t\t\t\t\t\t\t\t\t");
     strcat(buffer,"Light: ");
     strcat(buffer,itoa(SHG_Light,env_buffer,10)); 
-    strcat(buffer,"\n");
+    strcat(buffer,"\%\n");
 
 
      TM_USART_Puts(USART1,buffer);
