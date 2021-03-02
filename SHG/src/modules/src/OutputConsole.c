@@ -108,7 +108,7 @@ void OutputConsole(void const * argument)
     strcat(buffer,"[SHG:ACTUATORS]  WS status: ");
     strcat(buffer, BOOL2STRING(SHG_WsStatus)); 
     strcat(buffer,"\t\t\t\t\t\t\t\t");
-    strcat(buffer,"TS status: ");
+    strcat(buffer,"HS status: ");
     strcat(buffer, BOOL2STRING(SHG_HsStatus)); 
     strcat(buffer,"\t\t\t\t\t\t\t\t\t\t\t\t");
     strcat(buffer,"LS status: ");
