@@ -50,8 +50,12 @@ the steps listed below:
 
 The source file of the SHG is inside the folder *SHG/src* of the project, here we can find the *main.c* file, and the source file of the operating system installed (FreeRTOS), but the main functionalities of the firmware (the three parallel tasks that are activated in *freertos.c*) are inside the folder *SHG/src/modules/src* with their respective header files in *SHG/src/modules/inc*.
 If we give a look inside the folder *SHG/peripherals* we have two folders that contain the models of the sensors and of the actuators written in some *.cs* files, those external modules are connected throug I2C interfaces correctly defined in the file *peripheral_definition.repl*, their connection with the serial interfaces is instead done through the file *ext_peripheral.repl*.
+Further examples of peripherals model provided by the Renode infrastructure can be found [here](https://github.com/renode/renode-infrastructure/tree/3f1abde88ac5a2dae326b77ab91892f335e78f80/src/Emulator/Peripherals/Peripherals).
+
 In order to make the entire project executable by everyone in a very low number of steps is important to correctly define the *stm32f4_discovery.resc* file that has to be included through the Renode console as soon as the simulation program is launched. Inside this file the set of sensors and actuators are included to the enviroment loading also the platform description and the connections with the external modules through the *.repl* files.
 In the *.resc* files the alias for the environmental variables (Temperature, Humidity and Light) are created, and also the set of commands to be received by the BluetoothRX module are properly associated to a specific code to be sent through the I2C protocol (this last concept is very important because it is the key to make the program easy to be used from the Renode console).
+
+
 
 ### SHG_runner
 
@@ -91,12 +95,12 @@ In order to start the interaction with the SHG is important to simulate the pair
 ### SetThs
 
 **SetThs** is a command used to define a set of thresholds that the machine has to use in order to evaluate the values of the environmental parameters, the BluetoothRX module has to communicate the value of a threshold through the I2C channel and an acknowledge value used to confirm the last data, for example if the user want to set the thresholds of Temperature, Humidity and Light respectively at 35°C, 60% and 70% the BluetoothRX has to send to the board the following values:
-> **Command** 35
-**Ok1**
-**Command** 60
-**Ok2**
-**Command** 70
-**Ok3**
+> **Command** 35 <br />
+**Ok1** <br />
+**Command** 60 <br />
+**Ok2** <br />
+**Command** 70 <br />
+**Ok3** <br />
 
 In this way a user defined set of thresholds is set (the result can be checked by the *OutputConsole* or by the command **GetThs** prevously described).
 
@@ -111,7 +115,3 @@ The **Status** command can be used to monitor time by time the state of the mach
 ### Stop
 
 In order to stop the monitoring process of the SHG and to shut off all the control systems is possible to write the command **Stop**.
-
-
-
-
