@@ -84,7 +84,7 @@ In the following section a list of the available commands and a short descriptio
 
 In order to start the interaction with the SHG is important to simulate the pairing process between the BluetoothRX module and the user, this can be performed with the command **Pair** that communicates to the board that the user is connected to the external bluetooth module and it is ready to start the communication.
 
-## Start
+### Start
 
 **Start** is the command sent by the BluetoothRX module in order to communicate that the user want to start the SHG  monitoring process, from that point on the SHG will check the values of the environmental variables and will activate the control systems if those values are under the default thresholds (already defined by the machine).
 
