@@ -14,7 +14,7 @@ Authors: Mauro Perra, Luca Marongiu, Simone Peraccini
     - [CommandConsole](#commandconsole)
   - [Command List](#command-list)
     - [Pair](#pair)
-  - [Start](#start)
+    - [Start](#start)
     - [GetThs](#getths)
     - [SetThs](#setths)
     - [Status](#status)
